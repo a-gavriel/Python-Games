@@ -26,5 +26,5 @@ def mayorcol_aux(matrix,col,i,result):
         return mayorcol_aux(matrix, col, i+1, result)
 
 a = [[1,2,3,4],[5,16,7,8],[11,12,13,14]]
-get_col(a,2)
+print (get_col(a,1))
 print (mayorcol(a, 1))
