@@ -19,6 +19,25 @@ MAPVK_VK_TO_VSC = 0
 VK_TAB  = 0x09
 VK_MENU = 0x12
 
+
+
+keys = {
+    "0": 0x30,"1": 0x31,"2": 0x32,"3": 0x33,
+    "4": 0x34,"5": 0x35,"6": 0x36,"7": 0x37,
+    "8": 0x38,"9": 0x39,"a": 0x41,"b": 0x42,
+    "c": 0x43,"d": 0x44,"e": 0x45,"f": 0x46,
+    "g": 0x47,"h": 0x48,"i": 0x49,"j": 0x4A,
+    "k": 0x4B,"l": 0x4C,"m": 0x4D,"n": 0x4E,
+    "o": 0x4F,"p": 0x50,"q": 0x51,"r": 0x52,
+    "s": 0x53,"t": 0x54,"u": 0x55,"v": 0x56,
+    "w": 0x57,"x": 0x58,"y": 0x59,"z": 0x5A,
+    " ": 0x20,
+}
+
+
+
+
+
 # C struct definitions
 
 wintypes.ULONG_PTR = wintypes.WPARAM
@@ -141,6 +160,28 @@ def Discord(x):
         PressKey(0x0D) # Enter
         #time.sleep(0.5)
     
+
+def message(text, number):
+    print ('2 seconds remaining')
+    time.sleep(1)
+    print ('1 second remaining')
+    time.sleep(1)
+    text = text.lower().replace("\\n","\n")
+    for each in range(number):
+        for letter in text:
+            if letter == "\n":
+                code = 0x0D
+            else:
+                code = keys.get(letter)
+            PressKey(code)   
+            ReleaseKey(code)
+        time.sleep(0.0001)
+
+
+msg = input("Write message to send: ")
+if msg:
+    amount = int(input("Enter amount of messages: "))
+    message(msg,amount)
     
 '''
 codes:
