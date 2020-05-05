@@ -84,6 +84,7 @@ def revise_num(num):
 
 
 ########################
+# Recursividad de Pila
 def factorial_p(num):
   if num == 0:
     return 1
@@ -91,6 +92,7 @@ def factorial_p(num):
     return num * factorial_p(num-1)
 
 ########################
+# Recursividad de Cola
 def factorial_c_aux(num,resultado):
   if num == 0:
     return resultado
@@ -102,7 +104,21 @@ def factorial_c_aux(num,resultado):
 def factorial_c(num):
   return factorial_c_aux(num,1)
 
+########################
+# Iteración
+"""
+Pasos: elegir el ciclo a)foreach b) while c) for con índices
 
+While:
+Inicializar variables <- parámetros
+  - resultado = 1
+Negar la condición de finalización de recursividad
+  - while (num != 0):
+El bloque del else -> while
+  - Colocar al final los cambios de las variables
+Acciones de finalización -> después del while
+
+"""
 def factorial_i(num):
   resultado = 1
   while(num != 0):
