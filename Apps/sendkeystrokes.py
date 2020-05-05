@@ -115,35 +115,70 @@ def AltTab():
     ReleaseKey(VK_MENU) # Alt~
 
 
-def Hola(x):
+def Moveafk():
     print ('2 seconds remaining')
     time.sleep(1)
     print ('1 second remaining')
     time.sleep(1)
-    for i in range(x):
-        PressKey(0x48) # H
-        PressKey(0x4F) # O
-        PressKey(0x4C) # L
-        PressKey(0x41) # A
-        PressKey(0x0D) # Enter
-        time.sleep(0.001)
-        ReleaseKey(0x0D)
+    while(1):
+        PressKey(0x44) # D
+        time.sleep(1)
+        PressKey(0x41) # A  0x20
+        time.sleep(1)
+        PressKey(0x43) # A  0x20
+        time.sleep(1)
+        PressKey(0x55) # A  0x20
+        time.sleep(1)
+        ReleaseKey(0x44)
+        ReleaseKey(0x41)
+        ReleaseKey(0x55)
+        ReleaseKey(0x43)
+        time.sleep(1)
+
+        PressKey(0x45) # E  0x1B
+        time.sleep(1)
+        PressKey(0x20) 
+        time.sleep(1)
+        ReleaseKey(0x20)
+        ReleaseKey(0x45)
+
+
+        PressKey(0x44) # D
+        time.sleep(1)
+        PressKey(0x41) # A  0x20
+        time.sleep(1)
+        PressKey(0x43) # A  0x20
+        time.sleep(1)
+        PressKey(0x54) # A  0x20
+        time.sleep(1)
+        ReleaseKey(0x44)
+        ReleaseKey(0x41)
+        ReleaseKey(0x54)
+        ReleaseKey(0x43)
+        time.sleep(1)
+
+        PressKey(0x45) # E  0x1B
+        time.sleep(1)
+        PressKey(0x20) 
+        time.sleep(1)
+        ReleaseKey(0x20)
+        ReleaseKey(0x45)
+
+        PressKey(0x1B)
+        ReleaseKey(0x1B)
+
+
         
-def Libro(x):
+def singlekey():
     print ('2 seconds remaining')
     time.sleep(1)
     print ('1 second remaining')
     time.sleep(1)
-    for i in range(x):
-        PressKey(0x4C) # L
-        PressKey(0x49) # I
-        PressKey(0x42) # B
-        PressKey(0x52) # R
-        PressKey(0x4F) # O        
-        PressKey(0x0D) # Enter
-        time.sleep(0.01)
-        ReleaseKey(0x0D)
-        
+    while(1):
+        PressKey(0x49)         # i
+        ReleaseKey(0x49)
+        time.sleep(0.7)
+
 def Discord(x):
     print ('5 seconds remaining')
     time.sleep(5)
