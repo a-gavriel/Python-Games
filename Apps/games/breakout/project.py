@@ -11,8 +11,8 @@ class GameObject():
   def __init__(self,game):
     self.width = 10
     self.height = 10
-    self.xpos = width / 2
-    self.ypos = height / 10    
+    self.xpos = width // 2
+    self.ypos = height // 10    
     self.rect = pygame.rect.Rect(( self.xpos - self.width//2 , self.ypos - self.height//2 , self.width, self.height))   
   def left(self):
     return self.xpos - self.width//2
@@ -63,7 +63,7 @@ class Ball(GameObject):
     self.width = 7
     self.height = 7    
     self.xpos = randint(100,500)
-    self.ypos = height/3
+    self.ypos = height//3
     self.pong = pygame.mixer.Sound('Blip_1-Surround-147.wav')
     self.pong.set_volume(10)    
   def update(self,game, player):
@@ -157,7 +157,7 @@ class Wall:
       newcolor = (randint(0,255),randint(0,255),randint(0,255))
       if Wxpos > width:
         if adj == 0:
-          adj = newbrick.width / 2
+          adj = newbrick.width // 2
         else:
           adj = 0
         Wxpos = -adj
@@ -198,7 +198,14 @@ def run():
     #render game
     while(not game.crash):
       #agent stuff
-      final_move = randint(1,2) #TODO: replace with agent stuff
+      events = pygame.event.get()
+      final_move = 0
+      pressed = pygame.key.get_pressed()
+      if pressed[pygame.K_LEFT]:
+        final_move = 1
+      if pressed[pygame.K_RIGHT]:
+        final_move = 2
+      #final_move = randint(1,2) #TODO: replace with agent stuff
       game.player.update(final_move)     
       game.update()
       game.render()
