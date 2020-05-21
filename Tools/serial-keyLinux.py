@@ -3,6 +3,12 @@ from time import sleep
 import sys
 ###########################################################
 from pykeyboard import PyKeyboard
+"""
+python3 -m pip install --user xlib pyuserinput
+
+"""
+
+
 ###########################################################\
 
 Linux = 1
