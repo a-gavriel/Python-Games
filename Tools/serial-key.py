@@ -91,7 +91,7 @@ def ReleaseKey(hexKeyCode):
 
 ###########################################################
 COM = 'COM3'# /dev/ttyACM0 (Linux)
-BAUD = 115200
+BAUD = 9600
 
 ser = serial.Serial(COM, BAUD, timeout = .1)
 
