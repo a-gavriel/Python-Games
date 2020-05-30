@@ -1,86 +1,94 @@
-"""
-Original code: 
-
-https://stackoverflow.com/questions/2400262/how-to-create-a-timer-using-tkinter
-
-# for python 3.x use 'tkinter' rather than 'Tkinter'
-import Tkinter as tk
-import time
-
-class App():
-    def __init__(self):
-        self.root = tk.Tk()
-        self.label = tk.Label(text="")
-        self.label.pack()
-        self.update_clock()
-        self.root.mainloop()
-
-    def update_clock(self):
-        now = time.strftime("%H:%M:%S")
-        self.label.configure(text=now)
-        self.root.after(1000, self.update_clock)
-
-app=App()
-
-
-
-
-"""
 import tkinter as tk
 import datetime
 
+filename = "stopwatch_timers.txt"
+
+def readfile(mat = []):
+	fp = open(filename, "a+") #opens as a+ instead of r to prevent error "file does not exist"	
+	fp.seek(0)
+	lines = fp.readlines()
+	fp.close()
+	if lines == []:
+		print("No timers found!")
+		name = input("New timer's name (leave blank for default): ")
+		if name == "":
+			name = "default"
+		mat.append([name, 0])
+		return mat
+	else:		
+		for line in lines:
+			cleanline = (line.split("\n"))[0]
+			if cleanline:			
+				timer = cleanline.split(",")
+				mat.append([timer[0],int(timer[1])])
+		return mat
+
+
 
 def update_clock( label):
-  global root, counter
+  global root, counter, exit_
   counter += 1
   time = str(datetime.timedelta(seconds=counter))
   label.configure(text=time)
-  root.after(1000, update_clock,  label)  
+  if not exit_:
+    root.after(1000, update_clock,  label)  
+  else:
+  	root.destroy()
 
-def save(tn):
-	global root, counter
-	print("saving")
-	f = open("timers.txt", "r")
-	lines = f.readlines()
+def savefile(mat, tn):
+	global root, counter, exit_	
+	print("saving...")
+	mat[tn][1] = counter
+	f = open(filename, "w+")	# w+ truncates the file 	
+	for row in mat:
+		f.write(row[0] + "," + str(row[1]) + "\n")
 	f.close()
-	print(lines)
-	if lines != []:
-		lines[tn-1] = str(counter) + "\n"
-	else:
-		lines = [str(counter) + "\n"]
-	print(lines)
-	
-	f = open("timers.txt", "w")
-	f.truncate(0)
-	for l in lines:
-		f.write(l)
-	f.close()
-	root.destroy()
+	exit_ = True
 
-def App(tn):
-    global root, counter
+def getinputs(mat):
+	s = "\nWelcome!\nSelect a timer or write '-1' to create a new one:\n"
+	for i in range(len(mat)):
+		s += str(i) + "- "
+		s += mat[i][0]
+		s += "\n"
+	return s + "Choose timer: "
+
+def newcounter(mat):
+	global counter
+	name = input("New timer's name: ")
+	counter = 0
+	mat.append([name,0])
+	savefile(mat, -1)
+
+def App(mat, tn):
+    global root, counter, exit_
+    exit_ = False
     root = tk.Tk()
+    labelName = tk.Label(text=" "+mat[tn][0]+" ", font=("Courier", 44))
+    labelName.pack()
     label = tk.Label(text="", font=("Courier", 44))
     label.pack()
 
     update_clock(label)
 
 
-    root.protocol("WM_DELETE_WINDOW",lambda: save( tn))
+    root.protocol("WM_DELETE_WINDOW",lambda: savefile( mat, tn))
     root.mainloop()
 
-
-i = "0"
-while (i == "0"):
-	f = open("timers.txt", "r")
-	lines = f.readlines()
-	f.close()
-	i = input("Timers:\n0-Exit\n1-Design\nChoose timer:")
-	if i in "123":
+exit_ = False
+i = "-1"
+while (i == "-1"):
+	mat = []
+	readfile(mat)
+	sinp = getinputs(mat)
+	i = input(sinp)
+	if i == "":
+		break
+	if i in "0123456789":
 		tn = int(i)
-		t_chosen = ((lines[tn-1]).split("\n"))[0] if (lines != []) else ""
-		print(lines,tn,  t_chosen)
-		counter = int(t_chosen) if (t_chosen != "" ) else 0		
-		App(tn)
+		counter = mat[tn][1]	
+		App(mat, tn)
+	if i == "-1":
+		newcounter(mat)
 
 
