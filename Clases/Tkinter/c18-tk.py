@@ -51,8 +51,8 @@ def mainwindow():
   c1.pack()
 
   #                 file="subcarpeta/nombre_imagen.extension"
-  #img = PhotoImage(file="imgs/formales.png")
-  #c1.create_image(352/2,352/2,image=img)
+  img = PhotoImage(file="formales.png")
+  c1.create_image(352/2,352/2,image=img)
 
 
 

@@ -40,7 +40,6 @@ def check_block(Alive):
     j = int(x1 // 20)        
     if (matrix[i][j] == 0):
         Alive = False
-        print("X")
     return Alive
 
 def move_player(Alive, tail): 
