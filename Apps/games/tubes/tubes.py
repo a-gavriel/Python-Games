@@ -17,21 +17,24 @@ def check_hand(e,tubes, tubes_graph):#runs on mouse motion
     bbox= canvas.bbox(tube_.img)    
     if bbox[0] < e.x and bbox[2] > e.x and bbox[1] < e.y and bbox[3] > e.y:#checks whether the mouse is inside the boundrys
         tube_clic = i
-        tube_.print()
+        #tube_.print()
   if tube_clic != None:
     selected.pop(1)
     selected.insert(0,tube_clic)
-    print("clic: ",tube_clic, selected)
+    #print("clic: ",tube_clic, selected)
   else:
     selected[0] = None
   if selected[1] != None:
     if selected[0] != selected[1]:
       move_ball(tubes,selected[0],selected[1])
       selected = [None,None]
+    else:
+      selected = [None,None]
   vic = 1
   for t in tubes:
     c = t.check()
     vic = vic and c
+  print(selected)
   if vic == 1:
     print("VICTORY!!")
         
@@ -47,7 +50,7 @@ def move_ball(tubes,tubeindex1,tubeindex2):
     bc_there = canvas.itemcget(tubes[tubeindex1].balls[-1],"fill")
     bc_here = canvas.itemcget(tubes[tubeindex2].balls[-1],"fill")
     if bc_there != bc_here:
-      print("cant")
+      print("cant move")
       return None
 
   ball2 = tubes[tubeindex2].balls.pop()
@@ -62,7 +65,7 @@ class Tube():
     self.num = num
     self.balls = []
     self.filled = 0
-    print(self.img)
+    #print(self.img)
   def print(self):    
     print("Tube info:",self.x,self.y,self.img,self.num,self.balls)
   def check(self):
@@ -94,15 +97,15 @@ class Tube():
       ty = self.y-23*2
     canvas.move(ball,tx-bx,ty-by)
     self.balls.append(ball)
-    self.print()
-    print("---------")
+    #self.print()
+    #print("---------")
 
 def graph_tubes(tot_tubes,tubes, pile, tube_img):
   global canvas
   
   diff = tot_tubes -2
   c_tube = 0
-  print(tot_tubes,diff, len(pile)/4)
+  #print(tot_tubes,diff, len(pile)/4)
   for j in range(2):
     for i in range(ceil(tot_tubes/2)):
       if c_tube == tot_tubes:
