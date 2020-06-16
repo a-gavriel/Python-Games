@@ -3,3 +3,4 @@ test,12
 os-server,11551
 space-inv,9042
 tubes,11636
+bejeweled,10002
