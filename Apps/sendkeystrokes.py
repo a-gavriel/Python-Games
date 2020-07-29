@@ -230,7 +230,7 @@ while mode != "-1":
   elif mode == "3":
     msg = input("Key to send: ")
     if msg:
-      speed = int(input("Enter speed (offline 0.3 - online 0.7): "))
+      speed = float(input("Enter speed (offline 0.3 - online 0.7): "))
       singlekey(speed,msg)
   else:
     print("Invalid mode\n-----------------------------")

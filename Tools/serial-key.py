@@ -90,7 +90,12 @@ def ReleaseKey(hexKeyCode):
     user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
 ###########################################################
-COM = 'COM3'# /dev/ttyACM0 (Linux)
+from os import name as osname
+if (osname == 'posix'):
+    COM = '/dev/ttyACM0'
+else:
+    COM = 'COM3'
+
 BAUD = 9600
 
 ser = serial.Serial(COM, BAUD, timeout = .1)
@@ -99,13 +104,7 @@ print('Waiting for device');
 sleep(2)
 print(ser.name)
 
-'''
-#check args
-if("-m" in sys.argv or "--monitor" in sys.argv):
-	monitor = True
-else:
-	monitor= False
-'''
+
 ###########################################################
 
 # must be lower than 15 or update key_codes
@@ -125,75 +124,19 @@ key_codes = [0x41,0x42,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4A,0x4B,0x4C,0x4D,0x
 
 
 
-def setvalues(l):
-	for i in range(numkeys):
-		value = l[i]		
-		if (value != "1"):
-			value = "0"
-			l[i] = value
-		keys[i] = value
-
-def switch_key(i):
-	if value == '1':
-		PressKey(key_codes[i])
-	else:
-		ReleaseKey(key_codes[i])
-
-
-
 def check(l):
-	value = ""
-	for i in range(numkeys):
-		value = l[i]
-		if value != keys[i]:
-			keys[i] = value
-			keys_states[i] = not keys_states[i]
-		if keys_states[i]:
-			send_key(i)
+    value = ""
+    for i in range(numkeys):
+        if l[i] == "1":
+            PressKey(key_codes[i])
+            ReleaseKey(key_codes[i])
+    
 
+while True: 
+    val = str(ser.readline().decode('utf-8', errors='ignore').strip('\r\n'))#Capture serial output as a decoded string
+    valL = val.split("/")
+    check(valL) 
+    #print(keys,end=" :: ",flush = True)
+    #print(valL,end=" --- ",flush = True)
+    print(val, end="\r", flush=True)
 
-def send_key(i):
-	PressKey(key_codes[i])
-	ReleaseKey(key_codes[i])
-
-
-def check2(l):
-	value = ""
-	for i in range(numkeys):
-		if l[i] == "1":
-			send_key(i)
-	
-'''
-
-
-#First read contains trash
-val = str(ser.readline().decode('utf-8', errors='ignore').strip('\r\n'))#Capture serial output as a decoded string
-
-val = str(ser.readline().decode('utf-8', errors='ignore').strip('\r\n'))#Capture serial output as a decoded string
-valL = val.split("/")	
-setvalues(valL)
-
-
-print("List read: ", end="")
-print(valL)
-
-print("keys read: ", end="")
-print(keys)
-
-print("keys_states read: ", end="")
-print(keys_states)
-'''
-
-#sys.exit()
-
-while True:	
-	val = str(ser.readline().decode('utf-8', errors='ignore').strip('\r\n'))#Capture serial output as a decoded string
-	valL = val.split("/")
-	check2(valL)	
-	#print(keys,end=" :: ",flush = True)
-	#print(valL,end=" --- ",flush = True)
-	print(val, end="\r", flush=True)
-
-
-
- #

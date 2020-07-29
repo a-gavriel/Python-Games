@@ -117,8 +117,11 @@ class Game:
       elif self.clicked[0] != (i,j):        
         self.clicked[1] = (i,j)
         temp = self.matrix[i][j]
+        print("-----")
+        print(self.imgNames[temp])
         i0,j0 = self.clicked[0]
         self.matrix[i][j] = self.matrix[i0][j0]
+        print(self.imgNames[self.matrix[i0][j0]])
         self.matrix[i0][j0] = temp
         self.clicked = [None,None]
       else:

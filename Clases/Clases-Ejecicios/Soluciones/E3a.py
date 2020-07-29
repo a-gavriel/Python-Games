@@ -39,11 +39,11 @@ def a_p_rect(length,width):
 def sum3(n):
     n1 = n%10
     n = n//10
-    n2 = n%100
+    n2 = n%10
     n = n//10
-    n3 = n%1000
-    sum = n1 + n2 + n3
-    return sum
+    n3 = n%10
+    sum_ = n1 + n2 + n3
+    return sum_
 
 def par(N):
     sum = sum3(N)
