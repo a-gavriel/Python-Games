@@ -68,14 +68,15 @@ class Game:
     self.scale = 10
     self.size = (int(game_height/self.scale), int(game_width/self.scale))
     self.mat = [[0]*self.size[0] for i in range(self.size[1])]    
-    self.player = Player(self.scale, 1, 1, 1)
-        
+    self.players = [Player(self.scale, 1, 1, 1), Player(self.scale, 10, 10, 2)]
     self.dic = {0:(255,255,255),
                 1:(255,0,0),
                 2:(0,255,0)}
 
   def update(self):
-    self.crash = self.player.update(* self.size, self.mat)    
+
+    for player in self.players:
+      self.crash = self.crash or player.update(*self.size, self.mat)
 
     #self.ball.update(self, self.player)
   def render(self):
@@ -86,7 +87,8 @@ class Game:
         rect = pygame.rect.Rect(( j * self.scale , i * self.scale,  self.scale,  self.scale))         
         pygame.draw.rect(self.gameDisplay, self.dic[ e ] , rect )
 
-    self.player.render(self)
+    for player in self.players:
+      player.render(self)
     pygame.display.flip()
     
 
@@ -98,33 +100,34 @@ def run():
   game = Game(400,400)
   #initializegame
   #render game
-  final_move = 0
-  p2_ = 0
+
+  
+
   while(not game.crash):    
 
     pressed = pygame.key.get_pressed()
     
     if pressed[pygame.K_LEFT]:
-      final_move = 1
+      game.players[0].dir_ = 1
     if pressed[pygame.K_RIGHT]:
-      final_move = 2
+      game.players[0].dir_ = 2
     if pressed[pygame.K_UP]:
-      final_move = 3
+      game.players[0].dir_ = 3
     if pressed[pygame.K_DOWN]:
-      final_move = 4
+      game.players[0].dir_ = 4
 
     if pressed[pygame.K_a]:
-      p2_ = 1
+      game.players[1].dir_ = 1
     if pressed[pygame.K_d]:
-      p2_ = 2
+      game.players[1].dir_ = 2
     if pressed[pygame.K_w]:
-      p2_ = 3
+      game.players[1].dir_ = 3
     if pressed[pygame.K_s]:
-      p2_ = 4
+      game.players[1].dir_ = 4
 
 
-        
-    game.player.change_dir(final_move)   
+    
+ 
     
     game.update()
     game.render()
