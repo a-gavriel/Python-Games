@@ -6,12 +6,18 @@ import socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
 # get local machine name
-host = "192.168.100.40"                       
+hostname = socket.gethostname()
 
-port = 4000
+# get local machine name
+host = socket.gethostbyname(hostname)
+port = 8000
+try:
+	port = int(input("port: "))
+except:
+	print("using port 4000")
 
 # connection to hostname on the port.
-s.connect((host, port))                               
+s.connect((hostname, port))
 
 # Receive no more than 1024 bytes
 msg = s.recv(1024)        
@@ -27,7 +33,7 @@ while True:
 
 	print("response: "+respD)
 
-	if(msg == "-1"):
+	if(msg == "-1" or msg == "-2"):
 		break
 
 s.close()

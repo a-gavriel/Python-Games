@@ -5,7 +5,7 @@ global scores
 scores = []
 
 
-def getindexscore( user_data):
+def getindexscore(user_data):
     global scores
     if int(user_data[1]) > int(scores[1][1]):
         return 1
@@ -20,28 +20,11 @@ def getindexscore( user_data):
     else:
         return -1
 
-def replacescore( user_data, index):
+def replacescore(user_data, index):
     global scores
-    if index == 5:
-        scores[5] = user_data
-    elif index == 4:
-        scores [5] = scores[4]
-        scores[4] = user_data
-    elif index == 3:
-        scores[5] = scores[4]
-        scores[4] = scores[3]
-        scores[3] = user_data
-    elif index == 2:
-        scores[5] = scores[4]
-        scores[4] = scores[3]
-        scores[3] = scores[2]
-        scores[2] = user_data
-    elif index == 1:
-        scores[5] = scores[4]
-        scores[4] = scores[3]
-        scores[3] = scores[2]
-        scores[2] = scores[1]
-        scores[1] = user_data
+    scores.insert(index,user_data)
+    scores.pop(-1)
+
 
 def readcsv():
     global scores
@@ -60,7 +43,7 @@ def main():
     scores = [["Nombre","Score"]]+[["None","100"]]*5
     print (scores)
 
-    loadCSV = False
+    loadCSV = True
 
     if loadCSV:
         readcsv()
@@ -87,7 +70,7 @@ def main():
 
     ## generates CSV
 
-    with open('scores.csv','r+') as outfilecsv:
+    with open('scores.csv','w+', newline='') as outfilecsv: # w+ truncates file first
         writer = csv.writer(outfilecsv)
         writer.writerows(scores)
     outfilecsv.close()
