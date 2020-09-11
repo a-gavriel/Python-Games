@@ -96,7 +96,7 @@ if (osname == 'posix'):
 else:
     COM = 'COM3'
 
-BAUD = 9600
+BAUD = 115200
 
 ser = serial.Serial(COM, BAUD, timeout = .1)
 
@@ -136,7 +136,6 @@ while True:
     val = str(ser.readline().decode('utf-8', errors='ignore').strip('\r\n'))#Capture serial output as a decoded string
     valL = val.split("/")
     check(valL) 
-    #print(keys,end=" :: ",flush = True)
-    #print(valL,end=" --- ",flush = True)
-    print(val, end="\r", flush=True)
+    #print(val, end="\r", flush=True)
+    
 

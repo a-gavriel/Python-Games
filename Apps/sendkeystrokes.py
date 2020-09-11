@@ -123,16 +123,16 @@ def Moveafk():
   while(1):
     PressKey(0x44) # D
     time.sleep(1)
+    ReleaseKey(0x44)
     PressKey(0x41) # A  0x20
     time.sleep(1)
+    ReleaseKey(0x41)
     PressKey(0x43) # A  0x20
     time.sleep(1)
+    ReleaseKey(0x43)
     PressKey(0x55) # A  0x20
     time.sleep(1)
-    ReleaseKey(0x44)
-    ReleaseKey(0x41)
     ReleaseKey(0x55)
-    ReleaseKey(0x43)
     time.sleep(1)
 
     PressKey(0x45) # E  0x1B
@@ -211,8 +211,9 @@ def message(text, number):
       else:
         code = keys.get(letter)
       PressKey(code)   
+      time.sleep(0.01)
       ReleaseKey(code)
-    time.sleep(0.0001)
+    time.sleep(2)
 
 mode = "0"
 while mode != "-1":
