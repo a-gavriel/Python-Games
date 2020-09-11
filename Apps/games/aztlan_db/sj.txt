@@ -1,0 +1,124 @@
+Cantón,Distrito
+San José,Carmen
+San José,Merced
+San José,Hospital
+San José,Catedral
+San José,Zapote
+San José,San Francisco de Dos Ríos
+San José,La Uruca
+San José,Mata Redonda
+San José,Pavas
+San José,Hatillo
+San José,San Sebastián
+Escazú,Escazú
+Escazú,San Antonio
+Escazú,San Rafael
+Desamparados,Desamparados
+Desamparados,San Miguel
+Desamparados,San Juan de Dios
+Desamparados,San Rafael Arriba
+Desamparados,San Antonio
+Desamparados,Frailes
+Desamparados,Patarrá
+Desamparados,San Cristóbal
+Desamparados,Rosario
+Desamparados,Damas
+Desamparados,San Rafael Abajo
+Desamparados,Gravilias
+Desamparados,Los Guido
+Puriscal,Santiago
+Puriscal,Mercedes Sur
+Puriscal,Barbacoas
+Puriscal,Grifo Alto
+Puriscal,San Rafael
+Puriscal,Candelarita
+Puriscal,Desamparaditos
+Puriscal,San Antonio
+Puriscal,Chires
+Tarrazú,San Marcos
+Tarrazú,San Lorenzo
+Tarrazú,San Carlos
+Aserrí,Aserrí
+Aserrí,Tarbaca
+Aserrí,Vuelta de Jorco
+Aserrí,San Gabriel
+Aserrí,Legua
+Aserrí,Monterrey
+Aserrí,Salitrillos
+Mora,Colón
+Mora,Guayabo
+Mora,Tabarcia
+Mora,Piedras Negras
+Mora,Picagres
+Mora,Jaris
+Mora,Quitirrisí
+Goicoechea,Guadalupe
+Goicoechea,San Francisco
+Goicoechea,Calle Blancos
+Goicoechea,Mata de Plátano
+Goicoechea,Ipís
+Goicoechea,Rancho Redondo
+Goicoechea,Purral
+Santa Ana,Santa Ana
+Santa Ana,Salitral
+Santa Ana,Pozos
+Santa Ana,Uruca
+Santa Ana,Piedades
+Santa Ana,Brasil
+Alajuelita,Alajuelita
+Alajuelita,San Josecito
+Alajuelita,San Antonio
+Alajuelita,Concepción
+Alajuelita,San Felipe
+Vázquez de Coronado,San Isidro
+Vázquez de Coronado,San Rafael
+Vázquez de Coronado,Dulce Nombre de Jesús
+Vázquez de Coronado,Patalillo
+Vázquez de Coronado,Cascajal
+Acosta,San Ignacio
+Acosta,Guaitil
+Acosta,Palmichal
+Acosta,Cangrejal
+Acosta,Sabanillas
+Tibás,San Juan
+Tibás,Cinco Esquinas
+Tibás,Anselmo llorente
+Tibás,León XIII
+Tibás,Colima
+Moravia,San Vicente
+Moravia,San Jerónimo
+Moravia,La Trinidad
+Montes de Oca,San Pedro
+Montes de Oca,Sabanilla
+Montes de Oca,Mercedes
+Montes de Oca,San Rafael
+Turrubares,San Pablo
+Turrubares,San Pedro
+Turrubares,San Juan de Mata
+Turrubares,San Luis
+Turrubares,Carara
+Dota,Santa María
+Dota,Jardín
+Dota,Copey
+Curridabat,Curridabat
+Curridabat,Granadilla
+Curridabat,Sánchez
+Curridabat,Tirrases
+Pérez Zeledón,San Isidro de El General
+Pérez Zeledón,El General
+Pérez Zeledón,Daniel Flores
+Pérez Zeledón,Rivas
+Pérez Zeledón,San Pedro
+Pérez Zeledón,Platanares
+Pérez Zeledón,Pejibaye
+Pérez Zeledón,Cajón
+Pérez Zeledón,Barú
+Pérez Zeledón,Río Nuevo
+Pérez Zeledón,Páramo
+Pérez Zeledón,La Amistad
+León Cortés Castro,San Pablo
+León Cortés Castro,San Andrés
+León Cortés Castro,Llano Bonito
+León Cortés Castro,San Isidro
+León Cortés Castro,Santa Cruz
+León Cortés Castro,San Antonio
