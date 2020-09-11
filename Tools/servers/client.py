@@ -14,7 +14,7 @@ port = 8000
 try:
 	port = int(input("port: "))
 except:
-	print("using port 4000")
+	print(f"using port {port}")
 
 # connection to hostname on the port.
 s.connect((hostname, port))

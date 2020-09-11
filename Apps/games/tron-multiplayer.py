@@ -5,31 +5,33 @@ from random import *
 
 import socket
 
+
+
 def joingame():
   # create a socket object
   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
-  # get local machine name
-  host = "192.168.100.40"                       
+  local = 1
 
-  port = 4000
+  # get local machine name
+  host = "192.168.100.40" if local else input("ip: ")                
+
+  port = 4000 if local else int(input("port: "))
 
   # connection to hostname on the port.
   s.connect((host, port))                               
 
   # Receive no more than 1024 bytes
-  msg = s.recv(1024)        
-  print (msg.decode('ascii'))
-
+  msgRaw = s.recv(1024)        
+  msgDecoded =  (msgRaw.decode('ascii'))
+  mydata = msgDecoded.split(",")
+  player = int(mydata[0])
 
   while True:
-    msg = input("New message: ")
-    msgE = s.send(bytes(msg, 'ascii'))
+    msgRaw = s.recv(1024)
+    msgDecoded = resp.decode('ascii')
 
-    resp = s.recv(1024)
-    respD = resp.decode('ascii')
-
-    print("response: "+respD)
+    clients_data = dataDecoded.split(":")    
 
     if(msg == "-1"):
       break
@@ -125,27 +127,6 @@ class Game:
       player.render(self)
     pygame.display.flip()
     
-
-def hostgame():
-  pass
-
-
-## importing socket module
-## getting the hostname by socket.gethostname() method
-hostname = socket.gethostname()
-## getting the IP address using socket.gethostbyname() method
-ip_address = socket.gethostbyname(hostname)
-## printing the hostname and ip_address
-print(f"Hostname: {hostname}")
-print(f"IP Address: {ip_address}")
-
-
-
-
-
-
-
-
 
 
 

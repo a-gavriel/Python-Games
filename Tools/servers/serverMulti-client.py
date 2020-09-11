@@ -20,7 +20,7 @@ port = 8000
 try:
 	port = int(input("port: "))
 except:
-	print("using port 4000")
+	print(f"using port {port}")
 # bind to the port
 serversocket.bind((hostname, port))
 
@@ -59,6 +59,7 @@ def clientHandler(clientsocket, addr):
 		if dataD == "-2":
 			print("Closing all connections")
 			close_all()
+			clients.clear()
 			break
 
 
