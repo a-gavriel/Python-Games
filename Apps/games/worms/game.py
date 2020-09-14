@@ -15,6 +15,9 @@ class Player:
         self.camera = -1*x//2,-1*y//2
 
     def move_camera(self, dir_):
+
+        print(f"camera old {self.camera}", end=" - ")
+
         pos_x, pos_y = self.camera  # Split camara_pos
 
         if dir_ == 1:
@@ -27,16 +30,18 @@ class Player:
             pos_x -= self.speed
 
         if self.rect.x < W_WIDTH//2:  # Simple Sides Collision            
-            pos_x = self.camera[0]  # Reset Camera Pos Coord        
-        elif self.rect.x > WIDTH - W_WIDTH//2:            
-            pos_x = self.camera[0]
+            pos_x = 0 # Reset Camera Pos Coord        
+        elif self.rect.x > WIDTH - W_WIDTH//2 - self.size//2:            
+            pos_x = -960
         if self.rect.y < W_HEIGHT//2:
-            pos_y = self.camera[1]
-        elif self.rect.y > HEIGHT - W_HEIGHT//2 :            
-            pos_y = self.camera[1]
+            pos_y = 0
+        elif self.rect.y > HEIGHT - W_HEIGHT//2 - self.size//2:            
+            pos_y = -540
 
 
         self.camera = pos_x, pos_y
+
+        print(f"new {self.camera}")
         return self.camera
         
     def zoomin(self,val):
