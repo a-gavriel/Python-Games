@@ -81,6 +81,9 @@ class Game:
       if self.j + len(self.piece[0]) >= self.n:
         self.j -= 1
         checking = 1
+      if self.i + len(self.piece) >= self.m:
+        self.i -= 1
+        checking = 1
     
 
   def arrow_left(self):
