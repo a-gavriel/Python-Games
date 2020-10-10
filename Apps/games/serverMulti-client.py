@@ -6,7 +6,7 @@ from threading import Thread
 clients = []
 trds = []
 clients_data = ["0,10,10","1,100,100"]
-client_number = -1
+client_number = 0
 total_clients = 2
 
 
@@ -38,6 +38,12 @@ def close_all():
     except:
       pass
 
+def to_string(data):
+  r = ""
+  for d in data:
+    r += "," + d
+  return r
+
 def clientHandler(clientsocket, addr, client_number):
   global clients_data
   print("New Client!")
@@ -49,7 +55,7 @@ def clientHandler(clientsocket, addr, client_number):
   while True:
     dataRaw = clientsocket.recv(1024)
     dataDecoded = dataRaw.decode('ascii')
-    print(dataDecoded)
+    print(f"decoded {type(dataDecoded)} : {dataDecoded}")
 
     # msg = "Server received: " + dataDecoded +" from you:"+ str(addr)
     # clientsocket.sendto(msg.encode('ascii'), addr)
@@ -67,7 +73,8 @@ def clientHandler(clientsocket, addr, client_number):
     else:
       received_vals = dataDecoded.split(",")
       player = int(dataDecoded[0])
-      clients_data[player] = received_vals
+      clients_data[player] = dataDecoded
+      print(clients_data)
       msg = clients_data[0] + ":" + clients_data[1]
       clientsocket.sendall(msg.encode('ascii'))
 
@@ -75,9 +82,9 @@ def clientHandler(clientsocket, addr, client_number):
 while True:
   # establish a connection
   clientsocket,addr = serversocket.accept()
-  print("Got a connection from %s" % str(addr))
-  client_number += 1
+  print(f"Got a connection from {client_number}:{str(addr)}")
   clients.append((clientsocket, addr))
   t = Thread(target=clientHandler, args = (clientsocket, addr, client_number))
   trds.append(t)
   t.start()
+  client_number += 1
