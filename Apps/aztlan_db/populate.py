@@ -65,10 +65,10 @@ def create_category(conn, category):
     return cur.lastrowid
 
 def create_boardgame(conn, boardgame_title, 
-    bg_description = "", bg_original_price = -1, bg_current_price = -1):
-    sql = ''' INSERT into Boardgame(Title, Description, OriginalPrice, CurrentPrice) values (?, ?, ?, ?)'''
+    bg_description = "", bg_original_price = -1, bg_current_price = -1, base_game = 0, Standalone = 1):
+    sql = ''' INSERT into Boardgame(Title, Description, OriginalPrice, CurrentPrice, BaseGame, Standalone) values (?, ?, ?, ?, ?, ?)'''
     cur = conn.cursor()
-    cur.execute(sql, boardgame_title, bg_description, bg_original_price, bg_current_price)
+    cur.execute(sql, boardgame_title, bg_description, bg_original_price, bg_current_price, base_game, Standalone )
     conn.commit()
     return cur.lastrowid
 
@@ -126,11 +126,6 @@ def create_customer(conn, name, lastname, email, distrito, canton, provincia, pa
     return cur.lastrowid
 
 
-
-def create_customer_no_dir(conn, name, lastname, email, id_ = "", fkDistrito = 0, phone1 = 0):
-    sql = ''' INSERT into 
-    Customer (Name, Lastname, Email1, Identification, fkDistrito, Phone1) values (?,?,?,?,?,?)
-    '''
 
 
 #create_local

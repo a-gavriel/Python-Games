@@ -14,7 +14,10 @@ conn.execute('''CREATE TABLE Boardgame
   Title VARCHAR(256) NOT NULL UNIQUE,
   Description TEXT,
   OriginalPrice INT,
-  CurrentPrice INT
+  CurrentPrice INT,
+  BaseGame INT DEFAULT 0,
+  Standalone INT DEFAULT 1,
+  FOREIGN KEY (Basegame) REFERENCES Boardgame (idBoardgame)
   );''')
 
 conn.execute('''CREATE TABLE Category_Boardgame
@@ -28,13 +31,11 @@ conn.execute('''CREATE TABLE Category_Boardgame
 
 
 
-conn.execute('''CREATE TABLE Item_store
-  (idItem_store INTEGER PRIMARY KEY,  
+conn.execute('''CREATE TABLE Item
+  (idItem INTEGER PRIMARY KEY,  
   fkBoardgame INT NOT NULL,
-  Standalone INT NOT NULL DEFAULT 1,
   Description TEXT,
-  FOREIGN KEY (fkBoardgame) REFERENCES Boardgame (idBoardgame),
-  UNIQUE (fkBoardgame, Standalone, Description)
+  FOREIGN KEY (fkBoardgame) REFERENCES Boardgame (idBoardgame)
   );''')
 
 
@@ -70,8 +71,8 @@ conn.execute('''CREATE TABLE Distrito
   );''')
 
 
-conn.execute('''CREATE TABLE Local_store
-  (idLocal_store INTEGER PRIMARY KEY,
+conn.execute('''CREATE TABLE LocalStore
+  (idLocalStore INTEGER PRIMARY KEY,
   Name VARCHAR(45) NOT NULL,  
   Direccion TEXT
   );''')
@@ -100,22 +101,22 @@ conn.execute('''CREATE TABLE Rental
   Rental_date DATETIME NOT NULL,
   Expected_date DATETIME NOT NULL, 
   Returned_date DATETIME,  
-  fkLocal_store INT NOT NULL,
+  fkLocalStore INT NOT NULL,
   fkCustomer INT NOT NULL,
   Price INT NOT NULL,
   Paid INT,
   Payment_mathod VARCHAR(45),
   Description TEXT NULL,
-  FOREIGN KEY (fkLocal_store) REFERENCES Local_store (idLocal_store),
+  FOREIGN KEY (fkLocalStore) REFERENCES LocalStore (idLocalStore),
   FOREIGN KEY (fkCustomer) REFERENCES Customer (idCustomer)
   );''')
 
-conn.execute('''CREATE TABLE Rental_Item_store
-  (fkItem_store INT NOT NULL,
+conn.execute('''CREATE TABLE Rental_Item
+  (fkItem INT NOT NULL,
   fkRental INT NOT NULL,
-  FOREIGN KEY (fkItem_store) REFERENCES Item_store (idItem_store),
+  FOREIGN KEY (fkItem) REFERENCES Item (idItem),
   FOREIGN KEY (fkRental) REFERENCES Rental (idRental),
-  UNIQUE (fkItem_store, fkRental)
+  UNIQUE (fkItem, fkRental)
   );''')
 
 
