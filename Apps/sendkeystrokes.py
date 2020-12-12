@@ -198,7 +198,7 @@ def Discord(x):
     #time.sleep(0.5)
   
 
-def message(text, number):
+def message(text, number, delay):
   print ('2 seconds remaining')
   time.sleep(1)
   print ('1 second remaining')
@@ -213,7 +213,7 @@ def message(text, number):
       PressKey(code)   
       time.sleep(0.01)
       ReleaseKey(code)
-    time.sleep(2)
+    time.sleep(delay)
 
 mode = "0"
 while mode != "-1":
@@ -224,7 +224,8 @@ while mode != "-1":
     msg = input("Write message to send: ")
     if msg:
       amount = int(input("Enter amount of messages: "))
-      message(msg,amount)
+      delay = float(input("Enter delay in seconds"))
+      message(msg,amount, delay)
   elif mode == "2":
     Moveafk()
     print("Finished moving afk?")
