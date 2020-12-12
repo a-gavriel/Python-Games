@@ -4,14 +4,14 @@ conn = sqlite3.connect('aztlan.db')
 
 conn.execute('''CREATE TABLE Category
   (idCategory INTEGER PRIMARY KEY,
-  Name        VARCHAR(45) NOT NULL,
+  Name        TEXT NOT NULL,
   UNIQUE (Name COLLATE NOCASE)
   );''')
 
 
 conn.execute('''CREATE TABLE Boardgame
   (idBoardgame INTEGER PRIMARY KEY,
-  Title VARCHAR(256) NOT NULL UNIQUE,
+  Title TEXT NOT NULL UNIQUE,
   Description TEXT,
   OriginalPrice INT,
   CurrentPrice INT,
@@ -41,12 +41,12 @@ conn.execute('''CREATE TABLE Item
 
 conn.execute('''CREATE TABLE Pais
   (idPais INTEGER PRIMARY KEY,
-  Name        VARCHAR(45) NOT NULL UNIQUE
+  Name        TEXT NOT NULL UNIQUE
   );''')
 
 conn.execute('''CREATE TABLE Provincia
   (idProvincia INTEGER PRIMARY KEY,
-  Name        VARCHAR(45) NOT NULL, 
+  Name        TEXT NOT NULL, 
   fkPais INT NOT NULL,
   FOREIGN KEY (fkPais) REFERENCES Pais (idPais),
   UNIQUE (Name, fkPais)
@@ -54,7 +54,7 @@ conn.execute('''CREATE TABLE Provincia
 
 conn.execute('''CREATE TABLE Canton
   (idCanton INTEGER PRIMARY KEY,
-  Name        VARCHAR(45) NOT NULL, 
+  Name        TEXT NOT NULL, 
   fkProvincia INT NOT NULL,
   FOREIGN KEY (fkProvincia) REFERENCES Provincia (idProvincia),
   UNIQUE (Name, fkProvincia)
@@ -63,7 +63,7 @@ conn.execute('''CREATE TABLE Canton
 
 conn.execute('''CREATE TABLE Distrito
   (idDistrito INTEGER PRIMARY KEY,
-  Name        VARCHAR(45) NOT NULL, 
+  Name        TEXT NOT NULL, 
   Postal_code INT, 
   fkCanton INT NOT NULL,
   FOREIGN KEY (fkCanton) REFERENCES Canton (idCanton),
@@ -73,24 +73,24 @@ conn.execute('''CREATE TABLE Distrito
 
 conn.execute('''CREATE TABLE LocalStore
   (idLocalStore INTEGER PRIMARY KEY,
-  Name VARCHAR(45) NOT NULL,  
+  Name TEXT NOT NULL,  
   Direccion TEXT
   );''')
 
 
 conn.execute('''CREATE TABLE Customer
   (idCustomer INTEGER PRIMARY KEY,
-  Name VARCHAR(45) NOT NULL,  
-  Lastname VARCHAR(45) NOT NULL,  
+  Name TEXT NOT NULL,  
+  Lastname TEXT NOT NULL,  
   fkDistrito INT,
   Direccion TEXT,
   Phone1 INT, 
   Phone2 INT, 
   Create_date DATE NOT NULL, 
   Active INT NOT NULL DEFAULT 1, 
-  Email1 VARCHAR(45) NOT NULL UNIQUE ,
-  Email2 VARCHAR(45),  
-  Identification VARCHAR(45) UNIQUE,
+  Email1 TEXT NOT NULL UNIQUE ,
+  Email2 TEXT,  
+  Identification TEXT UNIQUE,
   FOREIGN KEY (fkDistrito) REFERENCES Distrito (idDistrito),
   );''')
 
@@ -105,7 +105,7 @@ conn.execute('''CREATE TABLE Rental
   fkCustomer INT NOT NULL,
   Price INT NOT NULL,
   Paid INT,
-  Payment_mathod VARCHAR(45),
+  Payment_method TEXT,
   Description TEXT NULL,
   FOREIGN KEY (fkLocalStore) REFERENCES LocalStore (idLocalStore),
   FOREIGN KEY (fkCustomer) REFERENCES Customer (idCustomer)
