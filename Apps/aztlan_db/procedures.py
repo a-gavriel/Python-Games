@@ -21,7 +21,7 @@ def create_provincia(conn, provincia, pais):
     sql = ''' INSERT into Provincia (Name, fkPais) values (?, 
         (select idPais from Pais where Pais.Name = ? limit 1)) '''
     cur = conn.cursor()
-    cur.execute(sql, provincia, pais)
+    cur.execute(sql, (provincia, pais))
     conn.commit()
     return cur.lastrowid
 
@@ -35,7 +35,7 @@ def create_canton(conn, canton, provincia, pais):
         (select idPais from Pais where Pais.Name = ? limit 1) 
     limit 1)) '''
     cur = conn.cursor()
-    cur.execute(sql, canton, provincia, pais)
+    cur.execute(sql, (canton, provincia, pais))
     conn.commit()
     return cur.lastrowid
 
@@ -114,7 +114,7 @@ def create_direction(conn, direccion, distrito, canton, provincia, pais):
     return cur.lastrowid
 
 
-def create_customer(conn, name, lastname, email, distrito, canton, provincia, pais, id_ = "", phone1 = 0, direccion = "" ):
+def create_customer_location(conn, name, lastname, email, distrito, canton, provincia, pais, id_ = "", phone1 = 0, direccion = "" ):
 
     sql_dir = ''' INSERT into Customer (Name, Lastname, email, fkDistrito, Identification, 
         Phone1, Direccion) values (?, ?, ?, 
@@ -132,6 +132,14 @@ def create_customer(conn, name, lastname, email, distrito, canton, provincia, pa
     return cur.lastrowid
 
 
+def create_customer(conn, name, lastname, email, id_ = "", phone1 = 0, direccion = "" ):
+
+    sql_dir = ''' INSERT into Customer (Name, Lastname, email, Identification, 
+        Phone1, Direccion) values (?, ?, ?, ?, ?, ? ) '''
+    cur = conn.cursor()
+    cur.execute(sql_dir, (name, lastname, email, id_, phone1, direccion))
+    conn.commit()
+    return cur.lastrowid
 
 
 #create_local
@@ -145,9 +153,8 @@ def create_item(conn, board_game, description = ""):
     return cur.lastrowid
 
 
-#def list_items()
 
-def create_rental(conn, idCustomer, price = 0, amount_paid = 0, paid_method = "" , local_store = 1, rental_date = None, expected_date = None, return_date = None , description = "" ):   
+def create_rental_pkCustomer(conn, pkCustomer, price = 0, amount_paid = 0, paid_method = "" , local_store = 1, rental_date = None, expected_date = None, return_date = None , description = "" ):   
     if rental_date is None:
         rental_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if expected_date is None:
@@ -155,13 +162,48 @@ def create_rental(conn, idCustomer, price = 0, amount_paid = 0, paid_method = ""
         expected_date = (datetime.fromisoformat( rental_date ) + default_delta ).strftime("%Y-%m-%d %H:%M:%S")
 
     sql_dir = ''' INSERT into Rental ( Rental_date, Expected_date, Returned_date, fkLocalStore, fkCustomer, Price, Paid, Payment_method, Description ) values (
-        (idCustomer, ?)'''
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)'''
     cur = conn.cursor()
-    cur.execute(sql_dir, (board_game, description))
+    cur.execute(sql_dir, (rental_date, expected_date, return_date, local_store, pkCustomer, price, amount_paid, paid_method, description ))
+    conn.commit()
+    return cur.lastrowid
+
+def create_rental_Customer_email(conn, Customer_email, price = 0, amount_paid = 0, paid_method = "" , local_store = 1, rental_date = None, expected_date = None, return_date = None , description = "" ):   
+    if rental_date is None:
+        rental_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    if expected_date is None:
+        default_delta = timedelta(days=1)
+        expected_date = (datetime.fromisoformat( rental_date ) + default_delta ).strftime("%Y-%m-%d %H:%M:%S")
+
+    sql_dir = ''' INSERT into Rental ( Rental_date, Expected_date, Returned_date, fkLocalStore, fkCustomer, Price, Paid, Payment_method, Description ) values (
+        (?, ?, ?, ?, (SELECT idCustomer from Customer where Email1 = ? limit 1), ?, ?, ?, ?)'''
+    cur = conn.cursor()
+    cur.execute(sql_dir, (rental_date, expected_date, return_date, local_store, Customer_email, price, amount_paid, paid_method, description ))
+    conn.commit()
+    return cur.lastrowid
+
+def create_rental_Customer_id(conn, Customer_id, price = 0, amount_paid = 0, paid_method = "" , local_store = 1, rental_date = None, expected_date = None, return_date = None , description = "" ):   
+    if rental_date is None:
+        rental_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    if expected_date is None:
+        default_delta = timedelta(days=1)
+        expected_date = (datetime.fromisoformat( rental_date ) + default_delta ).strftime("%Y-%m-%d %H:%M:%S")
+
+    sql_dir = ''' INSERT into Rental ( Rental_date, Expected_date, Returned_date, fkLocalStore, fkCustomer, Price, Paid, Payment_method, Description ) values (
+        (?, ?, ?, ?, (SELECT idCustomer from Customer where Identification = ? limit 1), ?, ?, ?, ?)'''
+    cur = conn.cursor()
+    cur.execute(sql_dir, (rental_date, expected_date, return_date, local_store, Customer_id, price, amount_paid, paid_method, description ))
     conn.commit()
     return cur.lastrowid
 
 
+def add_item_to_rental(conn, idRental, idItem):
+    sql_dir = ''' INSERT into Rental_Item (fkItem, fkRental) values (?, ?)'''
+    cur = conn.cursor()
+    cur.execute(sql_dir, (idRental, idItem))
+    conn.commit()
+    return cur.lastrowid
 
 #assign item_to_rental
 
+#def list_items()
