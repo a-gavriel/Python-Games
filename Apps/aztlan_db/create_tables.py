@@ -15,6 +15,8 @@ conn.execute('''CREATE TABLE Boardgame
   Description TEXT,
   OriginalPrice INT,
   CurrentPrice INT,
+  MinPlayers INT,
+  MaxPlayers INT,
   BaseGame INT DEFAULT 0,
   Standalone INT DEFAULT 1,
   FOREIGN KEY (Basegame) REFERENCES Boardgame (idBoardgame)
@@ -91,7 +93,7 @@ conn.execute('''CREATE TABLE Customer
   Email1 TEXT NOT NULL UNIQUE ,
   Email2 TEXT,  
   Identification TEXT UNIQUE,
-  FOREIGN KEY (fkDistrito) REFERENCES Distrito (idDistrito),
+  FOREIGN KEY (fkDistrito) REFERENCES Distrito (idDistrito)
   );''')
 
 

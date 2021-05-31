@@ -204,6 +204,54 @@ def add_item_to_rental(conn, idRental, idItem):
     conn.commit()
     return cur.lastrowid
 
+def customer_search(name = None, lastname = None, email = None, phone = None):
+
+    selection = "SELECT * FROM Customer"
+    
+    def customer_search_default():
+        cur = conn.cursor()
+        cur.execute( "SELECT * FROM Customer WHERE Phone1 = ? OR Phone2 = ? OR Email1 LIKE ? OR Email2 LIKE ?", (phone,phone))
+        rows = cur.fetchall()
+        return rows
+
+    def customer_search_phone(phone):
+        cur = conn.cursor()
+        cur.execute( selection + " WHERE Phone1 = ? OR Phone2 = ?", (phone,phone))
+        rows = cur.fetchall()
+        return rows
+
+    def customer_search_email(email):
+        cur = conn.cursor()
+        cur.execute( selection + " WHERE Email1 LIKE ? OR Email2 LIKE ?", ('%'+email+'%','%'+email+'%'))
+        rows = cur.fetchall()
+        return rows
+
+    def customer_search_lastname(lastname):
+        cur = conn.cursor()
+        cur.execute( selection + " WHERE Lastname LIKE ?", ('%'+lastname+'%'))
+        rows = cur.fetchall()
+        return rows
+
+    def customer_search_name(name):
+        cur = conn.cursor()
+        cur.execute( selection + " WHERE Name LIKE ?", ('%'+name+'%'))
+        rows = cur.fetchall()
+        return rows
+
+    if name != None:
+        return customer_search_name(name)
+    elif lastname != None:
+        return customer_search_lastname(lastname)
+    elif email != None:
+        return customer_search_email(email)
+    elif phone != None:
+        return customer_search_phone(phone)
+    else:
+        return None
+
+
+
+
 #assign item_to_rental
 
 #def list_items()
