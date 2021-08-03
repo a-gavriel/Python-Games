@@ -1,6 +1,6 @@
 from PIL import Image
 
-infile = input()
+infile = input("Insert filename:")
 horizontal = int(input("horizontal:"))
 vertical = int(input("vertical:"))
 
