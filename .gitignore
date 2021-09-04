@@ -1,0 +1,6 @@
+*/.vscode/*
+Tools/*.jpg
+Tools/*.png
+.vscode/launch.json
+Apps/games/breakout/.vscode/launch.json
+*.pyc
