@@ -1,25 +1,44 @@
 
+import pygame
+
+
 sign = lambda x: (1, -1)[x < 0]
 
 
-# TODO: verify offset
-## shoueld call RecA = ball for correct offset
-def colission(RectA, RectB):
-  playerx = RectB.get_xpos()    
-  if (RectA.left() <= RectB.right() and RectA.right() >= RectB.left() and
-     RectA.top() <= RectB.bottom() and RectA.bottom() >= RectB.top() ):
-     RectA.pong.play(0)
-     offset = RectA.xpos - playerx #unknown error if replaced with RectB.xpos or RectB.get_xpos()
-     offsetF = offset / RectB.width
-     side = sign(offset)
-     offsetF = abs(offsetF)     
-     if offsetF > 0.7:
-       offset = side * 7
-     elif offsetF > 0.3:
-       offset = side * 6
-     else:
-       offset = side * 5
-     return (1,offset)
+def Collide(RectA, RectB):
+  """
+  Collide(RectA, RectB)
+
+  Determines if RectA collides with RectB.
+
+
+  Parameters
+  ----------
+  RectA : pygame.Rect
+      First rectangle
+  RectB : pygame.Rect
+      Second rectangle
+
+  Returns
+  -------
+  Bool
+      If both rectangles collide.
+
+  """
+  if (RectA.left < RectB.right) and (RectA.right > RectB.left) and \
+      (RectA.top < RectB.bottom) and (RectA.bottom > RectB.top):
+    return True
   else:
-    return (0,0) 
-  
+    return False
+
+
+def ball_player_collision(ball, player):
+  """
+  Determines if the ball collides with the player and updates the speed_x of the ball accordingly depending on the collision offset
+  """
+  ball.speed_y = - abs(ball.speed_y)
+  temp_rect = pygame.Rect( player.Rect.left - ball.Rect.width, player.Rect.top, \
+      player.Rect.width + 2* ball.Rect.width, player.Rect.height )
+  offset = ball.Rect.centerx - temp_rect.centerx
+  offset_normalized = offset / temp_rect.width
+  ball.speed_x = (offset_normalized * ball.MAX_SPEED)

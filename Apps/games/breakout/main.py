@@ -9,109 +9,77 @@ from physics import *
 
 
 class Game:
-  def __init__(self,game_width,game_height):
+  def __init__(self):
+    pygame.init()
+    self.clock = pygame.time.Clock()
+    self.gameDisplay = pygame.display.set_mode(DISPLAY_SIZE)
+    pygame.mouse.set_visible(0)       # turn off mouse pointer
     self.crash = False
-    self.player = Player(self)
-    self.ball = Ball(self)
+    self.player = Player()
+    self.ball = Ball()
     self.score =  0
-    self.game_height = game_height
-    self.game_width = game_width
-    self.gameDisplay = pygame.display.set_mode((game_width,game_height+60))
-    self.wall = Wall()
-    self.wall.build_wall(GAME_WIDTH) #TODO: goes here?
+    self.game_paused = False
+
   def update(self):
-    self.ball.update(self, self.player)
-    self.wall.update(self.ball,self)    
-  def render(self):
-    self.gameDisplay.fill((0,255,255))
-    self.player.render(self)
-    self.ball.render(self)
-    self.wall.render(self)
+    #self.ball.update(self, self.player)
+    #self.wall.update(self.ball,self)   
+    if Collide(self.ball.Rect, self.player.Rect):
+      ball_player_collision(self.ball, self.player)
+    
+    
+    if self.ball.update():
+      self.ball.spawn()
+
+  def main(self):
+    
+    while(not self.crash):
+      self.clock.tick(GAME_FPS)
+
+      # process key presses
+      for event in pygame.event.get():
+          if event.type == pygame.QUIT:
+              sys.exit()
+          if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+              self.game_paused = not self.game_paused
+
+      
+      if not self.game_paused:
+        keys = pygame.key.get_pressed()  #checking pressed keys
+        if keys[pygame.K_LEFT]:                        
+            self.player.move(-5,0)  
+        if keys[pygame.K_RIGHT]:                  
+            self.player.move(5,0)
+        if keys[pygame.K_SPACE]:
+            self.ball.start_ball()
+
+        self.update()
+      
+      self.render(self.game_paused)
+
+  def render(self, game_paused):
+    bg_color = ( 0x2F, 0x4F, 0x4F )
+    self.gameDisplay.fill(bg_color) #clean display
+    self.player.render(self.gameDisplay)
+    self.ball.render(self.gameDisplay)
+
+    if game_paused:
+      grey_image = pygame.Surface((GAME_WIDTH,GAME_HEIGHT))
+      grey_image.set_alpha(100)
+      self.gameDisplay.blit(grey_image, (0,0))
+
+      msg = pygame.font.Font(None,70).render(" Game Paused ", True, (0,255,255), (155,155,155))
+      msgrect = msg.get_rect()
+      msgrect = msgrect.move(GAME_WIDTH / 2 - (msgrect.center[0]), GAME_HEIGHT / 3)
+      self.gameDisplay.blit(msg, msgrect)
+
+
+    #self.wall.render(self)
     pygame.display.flip()
     
 
 
 
-
-
-class Wall:
-  def __init__(self):
-
-    self.bricks = []
-    self.colors = []
-    self.brick = pygame.image.load("brick.png").convert()
-    self.brickrect = self.brick.get_rect()
-  def build_wall(self, width):        
-    Wxpos = 0
-    Wypos = 60
-    adj = 0
-    for i in range (0, 14):        
-      newbrick = Brick()
-      newcolor = (randint(0,255),randint(0,255),randint(0,255))
-      if Wxpos > width:
-        if adj == 0:
-          adj = newbrick.width // 2
-        else:
-          adj = 0
-        Wxpos = -adj
-        Wypos += newbrick.height      
-      self.bricks.append(newbrick.get_rect())
-      self.colors.append(newcolor)
-      self.bricks[i] = self.bricks[i].move(Wxpos, Wypos)
-      Wxpos = Wxpos + newbrick.width
-  def update(self,ball, game):
-    index = ball.rect.collidelist(self.bricks)       
-    if index != -1: 
-      if ball.rect.center[0] > self.bricks[index].right or \
-        ball.rect.center[0] < self.bricks[index].left:
-        ball.xspeed = -ball.xspeed
-      else:
-        ball.yspeed = -(ball.yspeed)
-      ball.pong.play(0)              
-      self.bricks[index:index + 1] = []
-      self.colors[index:index + 1] = []
-      game.score += 10
-  def render(self,game):
-    for i in range(len(self.bricks)):
-    	game.gameDisplay.blit(self.brick, self.bricks[i])    
-    	#pygame.Surface.blit(self.image, game.gameDisplay, self.bricks[i])
-      #pygame.draw.rect(game.gameDisplay,self.colors[i],self.bricks[i])
-      
-
-
-def run():
-  pygame.init()            
-  counter_games = 0
-  #create agent
-  max_iterations = 10 #TODO: move to top
-  clock = pygame.time.Clock()
-  while counter_games < max_iterations:
-    game = Game(640,480)
-    #initializegame
-    #render game
-    while(not game.crash):
-      #agent stuff
-      final_move = 0 #default move
-
-      for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-          sys.exit()
-
-      pressed = pygame.key.get_pressed()
-      if pressed[pygame.K_LEFT]:
-        final_move = 1
-      if pressed[pygame.K_RIGHT]:
-        final_move = 2
-      #final_move = randint(1,2) #TODO: replace with agent stuff
-
-
-      game.player.update(final_move)     
-      game.update()
-      game.render()
-      #print(game.ball.ypos)
-      clock.tick(GAME_FPS)
-      #render game
-    print("game finished!")
-    counter_games += 1
-
-run()
+if __name__ == "__main__":
+  g = Game()
+  g.main()

@@ -5,88 +5,81 @@ from physics import *
 
 
 class GameObject():
-  def __init__(self,game):
-    self.width = 10
-    self.height = 10
-    self.xpos = GAME_WIDTH // 2
-    self.ypos = GAME_HEIGHT // 10    
-    self.rect = pygame.rect.Rect(( self.xpos - self.width//2 , self.ypos - self.height//2 , self.width, self.height))   
-  def left(self):
-    return self.xpos - self.width//2
-  def right(self):
-    return self.xpos + self.width//2
-  def top(self):
-    return self.ypos - self.height//2
-  def bottom(self):
-    return self.ypos + self.height//2
-  def get_xpos(self):
-    return self.xpos
-  def get_ypos(self):
-    return self.ypos
-  def get_rect(self):
-    return pygame.rect.Rect(( self.xpos - self.width//2 , self.ypos - self.height//2 , self.width, self.height))   
-  def update(self):
-    None
-  def render(self, game):    
-    pygame.draw.rect(game.gameDisplay,(0,0,0), self.get_rect() )
+  """
+  Basic Game Object with a rectangle, render and move function
+  
+  """
+  def __init__(self):
+    self.Rect = pygame.rect.Rect((10,10,10,10))
+  def render(self, gameDisplay):
+    pygame.draw.rect(gameDisplay,(0,0,0),self.Rect )
+  def move(self,dx,dy):
+    self.Rect = self.Rect.move(dx,dy)
 
-
-
-# TODO: verify speed
 class Player(GameObject):
-  def __init__(self,game):
-    super().__init__(game)   
-    self.xspeed = 20 
-    self.xpos = 200
-    self.width = 500    
-    self.ypos = 450
-  def update(self,direction):
-    if direction == 1:
-      if self.left() > 0:
-        self.xpos-= self.xspeed
-    if direction == 2:
-      if self.right() < GAME_WIDTH:
-        self.xpos += self.xspeed
-    self.rect = pygame.rect.Rect(( self.xpos - self.width//2 , self.ypos - self.height//2 , self.width, self.height))  
+  """
+  Player Game Object, it can move!
+  
+  """
+  def __init__(self):
+    super().__init__()
+    self.Rect = pygame.rect.Rect((GAME_WIDTH//2-50,(7*GAME_HEIGHT)//8,100,10))
+  def move(self,dx,dy):    
+    self.Rect = self.Rect.move(dx,0)
+    new_x_left, new_x_right = self.Rect.left, self.Rect.right
+    if self.Rect.left < 0:
+      self.Rect = self.Rect.move( 0 - new_x_left, 0 )
+    if self.Rect.right > GAME_WIDTH:
+      self.Rect = self.Rect.move( (GAME_WIDTH) - new_x_right, 0 )
 
-# TODO: verify speed
+
+
 class Ball(GameObject):
-  def __init__(self,game):
-    super().__init__(game)
-    self.basespeed = GAME_SPEED
-    self.xspeed = self.basespeed
-    self.yspeed = self.basespeed
-    self.width = 7
-    self.height = 7    
-    self.xpos = randint(100,500)
-    self.ypos = GAME_WIDTH//3
-    self.pong = pygame.mixer.Sound('Blip_1-Surround-147.wav')
-    self.pong.set_volume(10)    
+  """
+  Ball Game Object, can bounce. Starts without moving.
+  """
+  def __init__(self):
+    super().__init__()
+    self.img = pygame.image.load("ball.png").convert()
+    self.Rect = self.img.get_rect()
+    self.spawn()
+    self.speed_x = 0
+    self.speed_y = 0
+    self.MAX_SPEED = 15
 
-  def update(self, game, player):
-    self.rect = pygame.rect.Rect(( self.xpos - self.width//2 , self.ypos - self.height//2 , self.width, self.height))  
-    self.xpos += (self.xspeed )
-    self.ypos += (self.yspeed )
-    if (self.xpos <= 0):
-      self.xspeed *= -1
-    if (self.xpos >= GAME_WIDTH):
-      self.xspeed *= -1
-    if (self.ypos <= 0):
-      self.yspeed *= -1
-    if (self.ypos > GAME_HEIGHT):
-      game.crash = True
-    col_result = colission(self,player)
-    #print(self.xpos, self.ypos)
-    if col_result[0]:      
-      self.yspeed *= -1
-      print(col_result[1])
+  def start_ball(self):
+    if (self.speed_x == 0) and (self.speed_y == 0):
+      self.speed_x = 0
+      self.speed_y = INITIAL_BALL_SPEED
+
+  def spawn(self):
+    self.speed_x = 0
+    self.speed_y = 0
+    spawn_range_x = (GAME_WIDTH//4,(GAME_WIDTH*3)//4)
+    spawn_x = randint(*spawn_range_x)
+    spawn_y = (GAME_HEIGHT)//3
+    self.Rect = self.Rect.move( spawn_x - self.Rect.left , spawn_y-self.Rect.top )
+
+  def update(self):
+    self.Rect = self.Rect.move(self.speed_x,self.speed_y)
+    if self.Rect.left < 0 or self.Rect.right > GAME_WIDTH:
+      self.speed_x = -self.speed_x
+    if self.Rect.top < 0:
+      self.speed_y = -self.speed_y
+    
+    if self.Rect.top > GAME_HEIGHT:
+      return True
+    else:
+      return False
+
+  def render(self,gameDisplay):
+    gameDisplay.blit(self.img, self.Rect)
 
 
-class Brick(GameObject):
+class Brick(GameObject):  
   def __init__(self):
     super().__init__(self)  
-    self.xpos = 0
-    self.ypos = 0    
-    self.width = 52
-    self.height = 21
-    
+    self.img = pygame.image.load("brick.png").convert()
+    self.Rect = self.img.get_rect()
+  def render(self,gameDisplay):
+    gameDisplay.blit(self.img, self.Rect)
