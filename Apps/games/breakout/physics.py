@@ -41,4 +41,18 @@ def ball_player_collision(ball, player):
       player.Rect.width + 2* ball.Rect.width, player.Rect.height )
   offset = ball.Rect.centerx - temp_rect.centerx
   offset_normalized = offset / temp_rect.width
-  ball.speed_x = (offset_normalized * ball.MAX_SPEED)
+  ball.speed_x = round(offset_normalized * ball.MAX_SPEED,0)
+
+def ball_brick_collision(ball, brickRect):
+  if ball.speed_x == 0:
+    ball.speed_y = -ball.speed_y
+  else:
+    if ball.Rect.centerx <= brickRect.right or \
+      ball.Rect.centerx >= brickRect.left:
+      ball.speed_x = -ball.speed_x
+    if ball.Rect.centery <= brickRect.top or \
+      ball.Rect.centery >= brickRect.bottom:
+      ball.speed_y = -ball.speed_y
+    else:
+      ball.speed_y = -ball.speed_y
+  

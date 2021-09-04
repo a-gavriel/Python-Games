@@ -40,7 +40,7 @@ class Ball(GameObject):
   """
   def __init__(self):
     super().__init__()
-    self.img = pygame.image.load("ball.png").convert()
+    self.img = pygame.image.load("ball-2.png").convert_alpha()
     self.Rect = self.img.get_rect()
     self.spawn()
     self.speed_x = 0
@@ -76,9 +76,10 @@ class Ball(GameObject):
     gameDisplay.blit(self.img, self.Rect)
 
 
-class Brick(GameObject):  
+class Brick(GameObject):
+  
   def __init__(self):
-    super().__init__(self)  
+    super().__init__()  
     self.img = pygame.image.load("brick.png").convert()
     self.Rect = self.img.get_rect()
   def render(self,gameDisplay):

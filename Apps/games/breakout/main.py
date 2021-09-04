@@ -20,17 +20,44 @@ class Game:
     self.score =  0
     self.game_paused = False
 
+
+    self.brick_img = pygame.image.load("brick-1.png").convert()
+    self.brick_list = []
+    self.create_bricks()
+
   def update(self):
     #self.ball.update(self, self.player)
     #self.wall.update(self.ball,self)   
     if Collide(self.ball.Rect, self.player.Rect):
       ball_player_collision(self.ball, self.player)
     
+
+    collided_brick_i = self.ball.Rect.collidelist(self.brick_list)
+    if collided_brick_i != -1:
+      ball_brick_collision(self.ball, self.brick_list[collided_brick_i])
+      self.brick_list.pop(collided_brick_i)
     
     if self.ball.update():
       self.ball.spawn()
 
+  def create_bricks(self):
+    brick_width = 32
+    brick_height = 13
+    temp_matrix = [
+      [1,0,0,0, 0,0,0,0, 0,1,1,0, 0,0,0,0, 0,0,0,1],
+      [0,1,0,0, 0,0,0,0, 0,1,1,0, 0,0,0,0, 0,0,1,0],
+      [0,0,1,0, 0,0,0,0, 0,1,1,0, 0,0,0,0, 0,1,0,0],
+      [0,0,0,1, 0,0,0,0, 0,1,1,0, 0,0,0,0, 1,0,0,0],
+      [0,0,0,0, 0,0,0,0, 0,1,1,0, 0,0,0,0, 0,0,0,0]
+    ]
+    for i,row in enumerate(temp_matrix):
+      for j,e in enumerate(row):
+        if e != 0:
+          temp_rect = pygame.Rect(brick_width * j, brick_height* i, brick_width, brick_height )
+          self.brick_list.append(temp_rect)
+
   def main(self):
+    
     
     while(not self.crash):
       self.clock.tick(GAME_FPS)
@@ -63,6 +90,9 @@ class Game:
     self.player.render(self.gameDisplay)
     self.ball.render(self.gameDisplay)
 
+    for current_brick_rect in self.brick_list:
+      self.gameDisplay.blit(self.brick_img, current_brick_rect)
+
     if game_paused:
       grey_image = pygame.Surface((GAME_WIDTH,GAME_HEIGHT))
       grey_image.set_alpha(100)
@@ -81,5 +111,6 @@ class Game:
 
 
 if __name__ == "__main__":
+  seed(1)
   g = Game()
   g.main()
