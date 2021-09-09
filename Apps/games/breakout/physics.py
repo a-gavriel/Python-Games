@@ -1,6 +1,6 @@
 
 import pygame
-
+from constants import *
 
 sign = lambda x: (1, -1)[x < 0]
 
@@ -9,16 +9,16 @@ sign = lambda x: (1, -1)[x < 0]
 
 def Collide(GameObjectA, GameObjectB):
   """
-  Collide(RectA, RectB)
+  Collide(GameObjectA, GameObjectB)
 
-  Determines if RectA collides with RectB.
+  Determines if GameObjectA collides with GameObjectB.
 
 
   Parameters
   ----------
-  RectA : pygame.Rect
+  GameObjectA : GameObject
       First rectangle
-  RectB : pygame.Rect
+  GameObjectB : GameObject
       Second rectangle
 
   Returns
@@ -45,15 +45,23 @@ def ball_player_collision(ball, player):
   offset_normalized = offset / temp_rect[2]
   ball.speed_x = (offset_normalized * ball.MAX_SPEED)
 
+
+def collide_list(GameObjectA, GameObjectList):
+  for i,cur in enumerate(GameObjectList):
+    if Collide(GameObjectA, cur):
+      return i
+  return -1
+
+
 def ball_brick_collision(ball, brickRect):
   if ball.speed_x == 0:
     ball.speed_y = -ball.speed_y
   else:
-    if ball.left >= brickRect.right or \
-      ball.right <= brickRect.left:
-      ball.speed_x = -ball.speed_x
-    if ball.bottom >= brickRect.top or \
-      ball.top <= brickRect.bottom:
+    if abs(ball.bottom - brickRect.top) < COLLISION_TOL or \
+      abs(ball.top - brickRect.bottom) < COLLISION_TOL:
       ball.speed_y = -ball.speed_y
+    elif abs(ball.left - brickRect.right) < COLLISION_TOL or \
+      abs(ball.right - brickRect.left) < COLLISION_TOL:
+      ball.speed_x = -ball.speed_x
     
   

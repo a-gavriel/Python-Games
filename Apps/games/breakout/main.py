@@ -27,7 +27,7 @@ class Game:
       ball_player_collision(self.ball, self.player)
     
 
-    collided_brick_i = self.ball.get_render_rect().collidelist(self.wall.brick_list)
+    collided_brick_i = collide_list(self.ball, self.wall.brick_list)
     if collided_brick_i != -1:
       ball_brick_collision(self.ball, self.wall.brick_list[collided_brick_i])
       self.wall.brick_list.pop(collided_brick_i)
@@ -55,9 +55,9 @@ class Game:
       if not self.game_paused:
         keys = pygame.key.get_pressed()  #checking pressed keys
         if keys[pygame.K_LEFT]:                        
-            self.player.update(-0.5)  
+            self.player.update(-1)  
         if keys[pygame.K_RIGHT]:                  
-            self.player.update(0.5)
+            self.player.update(1)
         if keys[pygame.K_SPACE]:
             self.ball.start_ball()
 
@@ -107,12 +107,13 @@ class Wall:
     for i,row in enumerate(temp_matrix):
       for j,e in enumerate(row):
         if e != 0:
-          temp_rect = pygame.Rect(self.brick_width * j, self.brick_height* i, self.brick_width, self.brick_height )
+          #temp_rect = pygame.Rect(self.brick_width * j, self.brick_height* i, self.brick_width, self.brick_height )
+          temp_rect = Brick(self.brick_width * j, self.brick_height* i, self.brick_width, self.brick_height)          
           self.brick_list.append(temp_rect)
 
   def render(self, gameDisplay):
     for temp_rect in self.brick_list:
-      gameDisplay.blit(self.img, temp_rect)
+      gameDisplay.blit(self.img, temp_rect.get_render_rect())
 
 
 if __name__ == "__main__":

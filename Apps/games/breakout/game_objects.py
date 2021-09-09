@@ -10,39 +10,71 @@ class GameObject():
   
   """
   def __init__(self, x = 0, y = 0, width = 10, height = 10):
+    self._x = x
+    self._y = y
+    self._width = width
+    self._height = height
     self.left = x
     self.top = y
-    self.width = width
-    self.height = height
     self.right = self.left + self.width
     self.bottom = self.top + self.height 
-    self.Rect = (self.left, self.top, self.right, self.bottom) 
+    self.coords = (self.left, self.top, self.right, self.bottom) 
+
+  @property
+  def width(self):
+    return self._width
+  @width.setter
+  def width(self, val):
+    self._width = val
+    self.update_vars()
+
+  @property
+  def height(self):
+    return self._height
+  @height.setter
+  def height(self, val):
+    self._height = val
+    self.update_vars()
+
+  @property
+  def x(self):
+    return self._x
+  @x.setter
+  def x(self, val):
+    self._x = val
+    self.update_vars()
+
+  @property
+  def y(self):
+    return self._y
+  @y.setter
+  def y(self, val):
+    self._y = val
+    self.update_vars()
+
+  def update_vars(self):
+    self.left = self.x
+    self.top = self.y
+    self.right = self.x + self.width
+    self.bottom = self.y + self.height
+    self.coords = (self.left, self.top, self.right, self.bottom) 
 
   def get_center(self):
     return self.left + (self.width/2) , self.top + (self.height/2)
     
   def move(self,dx,dy):
-    self.left += dx
-    self.right += dx
-    self.top += dy
-    self.bottom += dy
-    self.Rect = (self.left, self.top, self.right, self.bottom)
+    self.x += dx
+    self.y += dy
   
   def replace(self, x, y):
-    self.left = x
-    self.top = y
-    self.right = self.left + self.width
-    self.bottom = self.top + self.height 
-    self.Rect = (self.left, self.top, self.right, self.bottom) 
+    self.x = x
+    self.y = y
 
   def load_rect(self, render_rect):
-    self.left = render_rect.left
-    self.top = render_rect.top
     self.width = render_rect.width
     self.height = render_rect.height
-    self.right = render_rect.right
-    self.bottom = render_rect.bottom
-    self.Rect = (render_rect.left, render_rect.top, render_rect.right, render_rect.bottom)
+    self.x = render_rect.left
+    self.y = render_rect.top
 
   def get_render_rect(self):
     return pygame.rect.Rect((self.left,self.top,self.width,self.height))
@@ -58,10 +90,13 @@ class Player(GameObject):
   
   """
   def __init__(self):
-    super().__init__(GAME_WIDTH//2-50,(7*GAME_HEIGHT)//8,100,10)    
+    super().__init__(GAME_WIDTH//2-50,(7*GAME_HEIGHT)//8,100,10) 
+    self.speedx = INITIAL_PLYR_SPEED
+    self.speedy = 0   
   def update(self, action):    
     
-    self.move(action,0)
+
+    self.move(self.speedx * action,0)
     new_x_left, new_x_right = self.left, self.right
     if self.left < 0:
       self.move( 0 - new_x_left, 0 )
@@ -77,7 +112,7 @@ class Ball(GameObject):
   def __init__(self):
     super().__init__()
     self.img = pygame.image.load("ball-2.png").convert_alpha()
-    self.Rect = self.load_rect( self.img.get_rect() )
+    self.load_rect( self.img.get_rect() )
     self.spawn()
     self.speed_x = 0
     self.speed_y = 0
@@ -114,9 +149,7 @@ class Ball(GameObject):
 
 class Brick(GameObject):
   
-  def __init__(self):
-    super().__init__()  
-    self.img = pygame.image.load("brick.png").convert()
-    self.load_rect(self.img.get_rect())
-  def render(self,gameDisplay):
-    gameDisplay.blit(self.img, self.get_render_rect())
+  def __init__(self, x, y, width, height, resistance = 1, color = (150,150,150)):
+    super().__init__(x, y, width, height)  
+    self.resistance = resistance
+    self.color = color
