@@ -1,1 +1,24 @@
-[{"Name": "A79", "Score": "465"}, {"Name": "None", "Score": "100"}, {"Name": "None", "Score": "100"}, {"Name": "None", "Score": "100"}, {"Name": "None", "Score": "100"}]
+{
+ "Scoreboard":[
+    {
+        "Name": "A26",
+        "Score": "974"
+    },
+    {
+        "Name": "A96",
+        "Score": "661"
+    },
+    {
+        "Name": "A20",
+        "Score": "550"
+    },
+    {
+        "Name": "A74",
+        "Score": "525"
+    },
+    {
+        "Name": "A41",
+        "Score": "521"
+    }
+]
+}
