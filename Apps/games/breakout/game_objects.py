@@ -94,8 +94,6 @@ class Player(GameObject):
     self.speedx = INITIAL_PLYR_SPEED
     self.speedy = 0   
   def update(self, action):    
-    
-
     self.move(self.speedx * action,0)
     new_x_left, new_x_right = self.left, self.right
     if self.left < 0:
@@ -111,7 +109,7 @@ class Ball(GameObject):
   """
   def __init__(self):
     super().__init__()
-    self.img = pygame.image.load("ball-2.png").convert_alpha()
+    self.img = pygame.image.load("ball-3.png").convert_alpha()
     self.load_rect( self.img.get_rect() )
     self.spawn()
     self.speed_x = 0

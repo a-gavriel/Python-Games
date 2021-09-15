@@ -4,7 +4,7 @@ from random import *
 from game_objects import *
 from constants import *
 from physics import *
-
+from numpy import random as random_numpy
 
 pygame.init()
 
@@ -66,7 +66,7 @@ class Game:
       self.render(self.game_paused)
 
   def render(self, game_paused):
-    bg_color = ( 0x2F, 0x4F, 0x4F )
+    bg_color = ( 0x2F, 0x2F, 0x2F )
     self.gameDisplay.fill(bg_color) #clean display
     self.player.render(self.gameDisplay)
     self.ball.render(self.gameDisplay)
@@ -91,22 +91,21 @@ class Wall:
   def __init__(self):
     self.img = pygame.image.load("brick-1.png").convert()
     self.brick_list = []
-    self.brick_width = 32
+    self.bricks_per_row = 20
+    self.brick_width = GAME_WIDTH // self.bricks_per_row
+    if float(GAME_WIDTH // self.bricks_per_row) != float(GAME_WIDTH / self.bricks_per_row):
+      print("The amount of bricks don't fit in the screen width")
+      exit()
     self.brick_height = 13
     self.create_bricks()
 
 
   def create_bricks(self):
-    temp_matrix = [
-      [1,0,0,0, 0,0,0,0, 0,1,1,0, 0,0,0,0, 0,0,0,1],
-      [0,1,0,0, 0,0,0,0, 0,1,1,0, 0,0,0,0, 0,0,1,0],
-      [0,0,1,0, 0,0,0,0, 0,1,1,0, 0,0,0,0, 0,1,0,0],
-      [0,0,0,1, 0,0,0,0, 0,1,1,0, 0,0,0,0, 1,0,0,0],
-      [0,0,0,0, 0,0,0,0, 0,1,1,0, 0,0,0,0, 0,0,0,0]
-    ]
+    temp_matrix =  random_numpy.randint(0,4,(5,self.bricks_per_row))
+
     for i,row in enumerate(temp_matrix):
       for j,e in enumerate(row):
-        if e != 0:
+        if e == 0:
           #temp_rect = pygame.Rect(self.brick_width * j, self.brick_height* i, self.brick_width, self.brick_height )
           temp_rect = Brick(self.brick_width * j, self.brick_height* i, self.brick_width, self.brick_height)          
           self.brick_list.append(temp_rect)
