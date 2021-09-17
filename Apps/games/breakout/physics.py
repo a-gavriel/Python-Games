@@ -7,7 +7,7 @@ sign = lambda x: (1, -1)[x < 0]
 
 
 
-def Collide(GameObjectA, GameObjectB):
+def Collide(GameObjectA_sides, GameObjectB_sides):
   """
   Collide(GameObjectA, GameObjectB)
 
@@ -27,8 +27,8 @@ def Collide(GameObjectA, GameObjectB):
       If both rectangles collide.
 
   """
-  if (GameObjectA.left < GameObjectB.right) and (GameObjectA.right > GameObjectB.left) and \
-      (GameObjectA.top < GameObjectB.bottom) and (GameObjectA.bottom > GameObjectB.top):
+  if (GameObjectA_sides[0] < GameObjectB_sides[2]) and (GameObjectA_sides[2] > GameObjectB_sides[0]) and \
+      (GameObjectA_sides[1] < GameObjectB_sides[3]) and (GameObjectA_sides[3] > GameObjectB_sides[1]):
     return True
   else:
     return False
@@ -46,22 +46,22 @@ def ball_player_collision(ball, player):
   ball.speed_x = (offset_normalized * ball.MAX_SPEED)
 
 
-def collide_list(GameObjectA, GameObjectList):
+def collide_list(GameObjectA, GameObjectList, brick_width, brick_height):
   for i,cur in enumerate(GameObjectList):
-    if Collide(GameObjectA, cur):
+    if Collide(GameObjectA.sides, (cur[0],cur[1],cur[0] + brick_width,cur[1] + brick_height)):
       return i
   return -1
 
 
-def ball_brick_collision(ball, brickRect):
+def ball_brick_collision(ball, brickRect, brick_width, brick_height):
   if ball.speed_x == 0:
     ball.speed_y = -ball.speed_y
   else:
-    if abs(ball.bottom - brickRect.top) < COLLISION_TOL or \
-      abs(ball.top - brickRect.bottom) < COLLISION_TOL:
+    if abs(ball.bottom - brickRect[1]) < COLLISION_TOL or \
+      abs(ball.top - (brickRect[1] + brick_height)) < COLLISION_TOL:
       ball.speed_y = -ball.speed_y
-    elif abs(ball.left - brickRect.right) < COLLISION_TOL or \
-      abs(ball.right - brickRect.left) < COLLISION_TOL:
+    elif abs(ball.left - (brickRect[0] + brick_width)) < COLLISION_TOL or \
+      abs(ball.right - brickRect[0]) < COLLISION_TOL:
       ball.speed_x = -ball.speed_x
     
   
