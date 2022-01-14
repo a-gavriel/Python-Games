@@ -2,13 +2,15 @@ import requests
 import re
 import threading
 import time
+from datetime import datetime
+
 
 thread_running = False
 thread_var : threading.Thread
 thread_result = False
 viagogo_test_blacklist = False
 timeout_time = 300
-
+last_check_time = datetime.now()
 
 class Page:
   def __init__(self, name, url, pattern, options):
@@ -108,7 +110,7 @@ def thread_function(reply_function):
   """
   Checks every second if should exit, if not check every "timeout time" the webpages
   """
-  global thread_result, thread_running 
+  global thread_result, thread_running, last_check_time
   thread_result = False
   while not thread_result:
     for i in range(timeout_time):
@@ -117,7 +119,11 @@ def thread_function(reply_function):
         print("exiting")
         return 
     
-    print("Running Thread")
+    
+    last_check_time = datetime.now()
+    current_time = last_check_time.strftime("%H:%M:%S")
+    print("Running Thread - " + current_time)
+
     result = check_pages()
     if result[0] != []:
       reply_function("RESULT FOUND!")
@@ -148,9 +154,10 @@ def create_thread(reply_function) -> None:
   """
   Creates the thread that searches through the web pages
   """
-  global thread_running, thread_var
+  global thread_running, thread_var, last_check_time
   if thread_running:
-    reply_function("Thread already running!")
+    temp = last_check_time.strftime("%H:%M:%S")
+    reply_function(f"Thread already running!, last check on {temp}")
 
   else:
     thread_running = True

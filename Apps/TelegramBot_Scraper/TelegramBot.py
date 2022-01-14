@@ -56,6 +56,8 @@ def help_command(update: Update, context: CallbackContext) -> None:
 def echo(update: Update, context: CallbackContext) -> None:
     """Echo the user message."""
 
+    
+
     if (update.message.text.lower() == "start thread"):
       scraper.create_thread(update.message.reply_text)
 
