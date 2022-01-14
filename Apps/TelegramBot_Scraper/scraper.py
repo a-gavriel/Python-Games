@@ -112,17 +112,12 @@ def thread_function(reply_function):
   """
   global thread_result, thread_running, last_check_time
   thread_result = False
+  reply_function("Startinig thread!")
+  print("Startinig thread!")
   while not thread_result:
-    for i in range(timeout_time):
-      time.sleep(1)
-      if not thread_running:
-        print("exiting")
-        return 
-    
-    
     last_check_time = datetime.now()
     current_time = last_check_time.strftime("%H:%M:%S")
-    print("Running Thread - " + current_time)
+    print("Thread last check - " + current_time)
 
     result = check_pages()
     if result[0] != []:
@@ -132,6 +127,12 @@ def thread_function(reply_function):
       thread_running = False
       return
       
+    # Wait
+    for i in range(timeout_time):
+      time.sleep(1)
+      if not thread_running:
+        print("Exiting thread!")
+        return 
   
 def change_timeout(message, reply_function) -> None:
   """
@@ -142,11 +143,11 @@ def change_timeout(message, reply_function) -> None:
   try:
     message = message.split()[1]
     timeout_time = int(message)
-    if timeout_time < 1:
+    if timeout_time <= 1:
       raise Exception("Not enough time")
-    reply_function("Set timeout:" + str(timeout_time))
+    reply_function("Set timeout: " + str(timeout_time))
   except:
-    reply_function("Set timeout:" + str(timeout_time))
+    reply_function("Set timeout: " + str(timeout_time))
 
 
 
