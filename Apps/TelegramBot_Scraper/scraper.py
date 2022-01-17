@@ -49,10 +49,10 @@ class Page:
     )
 
 eticket = Page("eticket", "https://www.eticket.cr/eventos.aspx?categoria=1&", 
-                  ".{1,10}mägo de oz.{5,10}|.{1,10}mago de oz.{1,10}|.{1,10}mago.{1,10}", "" )
+                  "\s{1,10}mägo de oz\s{5,10}|\s{1,10}mago de oz\s{1,10}|\s{1,10}mago\s{1,10}", "" )
 
 viagogo =  Page("viagogo", "https://www.viagogo.com/ww/Concert-Tickets/Hard-Rock-Metal/Mago-De-Oz-Tickets", 
-                  ".{1,30}costa rica.{1,30}", "" )
+                  "\s{1,30}costa rica\s{1,30}", "" )
 
 def check_pages():
   global viagogo_test_blacklist
@@ -122,6 +122,9 @@ def thread_function(reply_function):
     result = check_pages()
     if result[0] != []:
       reply_function("RESULT FOUND!")
+      time.sleep(1)
+      reply_function(result[0])
+      time.sleep(1)
       reply_function(result[1])
       thread_result = True
       thread_running = False
