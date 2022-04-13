@@ -49,7 +49,7 @@ class Page:
     )
 
 eticket = Page("eticket", "https://www.eticket.cr/eventos.aspx?categoria=1&", 
-                  "\s{1,10}mägo de oz\s{5,10}|\s{1,10}mago de oz\s{1,10}|\s{1,10}mago\s{1,10}", "" )
+                  "\s{0,10}mägo de oz\s{5,10}|\s{0,10}mago de oz\s{1,10}|\s{0,10}mago\s{1,10}", "" )
 
 viagogo =  Page("viagogo", "https://www.viagogo.com/ww/Concert-Tickets/Hard-Rock-Metal/Mago-De-Oz-Tickets", 
                   "\s{1,30}costa rica\s{1,30}", "" )
