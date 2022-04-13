@@ -41,12 +41,12 @@ def Gnewcard():
 		textnum = (counter)%len(words)
 		TEXT = words[textnum]
 		isblack = counter % 2
-	
+
 	backgroundNum = random.randint(0,5)
 
 	fontNum = 6 if isblack else random.randint(0,5)
 	while(backgroundNum == fontNum):
-	  fontNum = 6 if isblack else random.randint(0,5)  
+		fontNum = 6 if isblack else random.randint(0,5)  
 
 	newcard = ((TEXT) ,( backgroundNum) , (fontNum))
 
