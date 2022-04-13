@@ -11,7 +11,7 @@ class Game:
           matrix[i][j] = 1
     return matrix
 
-  def __init__(self,scale=20, matrix_size = 20):
+  def __init__(self,scale=40, matrix_size = 10):
     self.crash = False       
     self.score =  0
     self.scale = scale
@@ -32,14 +32,26 @@ class Game:
     #self.ball.update(self, self.player)
     #self.wall.update(self.ball,self)    
   def render(self):
-    self.gameDisplay.fill((0,255,255))
+    surface = pygame.Surface((self.game_width,self.game_height))
     
+    surface.fill((0,255,255))
     for i,row in enumerate(self.matrix):
       for j,tile in enumerate(row):
         rect = pygame.Rect(( j*self.scale , i*self.scale , self.scale, self.scale)) #Creo el rectangulo, x1, y1, w, h
-        pygame.draw.rect(self.gameDisplay,self.colors[tile],rect ) #Dibujo el rectangulo
+        pygame.draw.rect(surface,self.colors[tile],rect ) #Dibujo el rectangulo
+ 
 
-    self.player.render(self.gameDisplay, self.scale)
+
+    for i in range(self.game_width // self.scale):
+      pygame.draw.line(surface, (255,255,255), (i*self.scale, 0), (i*self.scale, self.game_height))
+      pygame.draw.line(surface, (255,255,255), (0, i*self.scale), (self.game_width, i*self.scale))
+
+    self.player.render(surface, self.scale)
+
+
+
+    surface = pygame.transform.rotozoom(surface, 30.0, 0.7)
+    self.gameDisplay.blit(surface, (0,0))
     pygame.display.flip()
 
 
@@ -114,5 +126,4 @@ def main():
 
 
 if __name__ == "__main__":
-  pass
-  #main()
+  main()
