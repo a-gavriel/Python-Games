@@ -27,11 +27,15 @@ def create_stairs(canvas : tk.Canvas) -> list[Stair]:
   return stair_list
 
 
-def update_all(window, barrel, paddle_list):
+def update_all(main_window : tk.Tk, player : Mario,  paddle_list : list[Paddle], counter : int = 0):
 
-  barrel.update(tk.Canvas , paddle_list )
+  #barrel.update( canvas , paddle_list )
 
-  window.after(10, update_all, window, paddle_list)
+  if counter % 3 == 0:
+    player.update()
+
+  
+  main_window.after(5, update_all, main_window, player, paddle_list, counter + 1)
 
 
 def main():
@@ -47,14 +51,18 @@ def main():
   stair_list : list[Stair] = create_stairs(canvas)
   
 
-  player = Mario(canvas, paddle_list, 50, MARIO_Y1, 70, PADDLE_1_Y1)
+  player = Mario(canvas, paddle_list, stair_list, 50, MARIO_Y1, 70, PADDLE_1_Y1)
   barrel = Barrel(canvas, 20, 90, paddle_list)
 
-  update_all(main_window, barrel, paddle_list)
+  update_all(main_window, player, paddle_list)
 
-  main_window.bind("<KeyPress-Left>", player.left)
-  main_window.bind("<KeyPress-Right>", player.right)
+  main_window.bind("<KeyPress-Left>", player.go_left)
+  main_window.bind("<KeyPress-Right>", player.go_right)
+  main_window.bind("<KeyRelease-Left>", player.stop_moving)
+  main_window.bind("<KeyRelease-Right>", player.stop_moving)
+  
   main_window.bind("<KeyPress-Up>", player.up)
+  main_window.bind("<KeyPress-Down>", player.down)
   main_window.bind("<space>", player.jump)
 
   main_window.mainloop()
