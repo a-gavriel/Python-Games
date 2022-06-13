@@ -26,15 +26,47 @@ class Mario:
         self.jump_counter = 0
         self.JUMP_LIMIT = 5
         self.moving = 0
+        self.pressed_keys = {
+            "LEFT" : False,
+            "RIGHT" : False,
+            "UP" : False,
+            "DOWN" : False
+        }
 
-    def go_left(self, event):
-        self.moving = 1
+    def manage_keys(self, event):
+        pressed = event.type == '2'
+        released = event.type == '3'
+        key_pressed = event.keysym.upper()
 
-    def go_right(self, event):
-        self.moving = 2
+        if key_pressed == 'RIGHT':
+            if pressed: 
+                self.pressed_keys['RIGHT'] = True
+            elif released:
+                self.pressed_keys['RIGHT'] = False
+                
+        if key_pressed == 'LEFT':
+            if pressed: 
+                self.pressed_keys['LEFT'] = True
+            elif released:
+                self.pressed_keys['LEFT'] = False
 
-    def stop_moving(self, event):
-        self.moving = 0
+        if key_pressed == 'UP':
+            if pressed: 
+                self.pressed_keys['UP'] = True
+            elif released:
+                self.pressed_keys['UP'] = False
+
+        if key_pressed == 'DOWN':
+            if pressed: 
+                self.pressed_keys['DOWN'] = True
+            elif released:
+                self.pressed_keys['DOWN'] = False
+
+
+        return 
+        
+
+
 
     def left(self) -> None:
         if (not self.in_stair() or self.jumping) and (self.x >= self.speed):
@@ -54,11 +86,17 @@ class Mario:
 
     def update(self):
 
-        if self.moving == 1:
+        if self.pressed_keys['LEFT'] and not self.pressed_keys['RIGHT']:
             self.left()
-        if self.moving == 2:
+        
+        if self.pressed_keys['RIGHT'] and not self.pressed_keys['LEFT']:
             self.right()
-
+        
+        if self.pressed_keys['UP'] and not self.pressed_keys['DOWN']:
+            self.up()
+        
+        if self.pressed_keys['DOWN'] and not self.pressed_keys['UP']:
+            self.down()
 
         if self.jumping != 0:
             if (self.jumping == 1) and (self.jump_counter == self.JUMP_LIMIT):
@@ -78,7 +116,7 @@ class Mario:
                 self.y2 += self.speed
                 self.map_canvas.move(self.id_, 0, self.speed)
 
-
+        return
 
 
     def get_current_paddle(self):
@@ -87,9 +125,16 @@ class Mario:
                 return i
         return -1
 
+    def in_stair(self) -> bool:
+        for stair_ in self.stair_list:
+            if (stair_.x < self.x) and (stair_.x2 > self.x2) and ((stair_.y -10) < self.y2) and ((stair_.y2 - 10) >= self.y2):
+                return True
+        return False
 
-    def up(self, event) -> None:
-        #print("climbing")
+    def up(self) -> None:
+        if self.jumping > 0:
+            return
+            
         for stair_ in self.stair_list:
             if (stair_.x < self.x) and (stair_.x2 > self.x2) and ((stair_.y - 10) < self.y2) and (stair_.y2 >= self.y2):
                 self.map_canvas.move(self.id_, 0, -self.speed)
@@ -98,14 +143,11 @@ class Mario:
         self.current_paddle = self.get_current_paddle()        
         return
 
-    def in_stair(self) -> bool:
-        for stair_ in self.stair_list:
-            if (stair_.x < self.x) and (stair_.x2 > self.x2) and ((stair_.y -10) < self.y2) and ((stair_.y2 - 10) >= self.y2):
-                return True
-        return False
 
-    def down(self, event) -> None:
-        #print("climbing")
+    def down(self) -> None:
+        if self.jumping > 0:
+            return
+
         for stair_ in self.stair_list:
             if (stair_.x < self.x) and (stair_.x2 > self.x2) and ((stair_.y - 20) < self.y2) and ((stair_.y2 - 10) >= self.y2):
                 self.map_canvas.move(self.id_, 0, self.speed)
@@ -116,7 +158,7 @@ class Mario:
         return
 
     def jump(self, event) -> None:
-        if self.jumping == 0:
+        if (self.jumping == 0) and not (self.in_stair()):
             self.jumping = 1
 
         return
@@ -153,7 +195,8 @@ class Barrel:
     def __init__(
         self, canvas : tk.Canvas, x:int, y:int, paddle_list : list[Paddle], w : int = 10, h : int = 10
     ):
-        self.current_paddle : int = -len(paddle_list)        
+        self.current_paddle : int = -len(paddle_list)
+        self.map_canvas : tk.Canvas = canvas   
         self.vx : int = 10
         self.vy : int = 0
         self.x = x
@@ -165,12 +208,13 @@ class Barrel:
         self.y2 = y + h
         self.id_ : tk._CanvasItemId = canvas.create_oval(x, y, x+w, y+h )
 
-    def update(self, canvas : tk.Canvas, paddle_list : list[Paddle]) -> int:
+
+    def update(self, paddle_list : list[Paddle]) -> int:
 
         self.x += self.vx
         self.y += self.vy
 
-        tk.Canvas.move(canvas, self.id_, self.vx, self.vy)
+        tk.Canvas.move(self.map_canvas, self.id_, self.vx, self.vy)
 
         if self.x >= constants.WIDTH or self.x <= 0:
             self.vy *= -1
