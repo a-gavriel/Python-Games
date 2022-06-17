@@ -193,12 +193,12 @@ class Stair:
 
 class Barrel:
     def __init__(
-        self, canvas : tk.Canvas, x:int, y:int, paddle_list : list[Paddle], w : int = 10, h : int = 10
+        self, canvas : tk.Canvas, x:int, y:int, paddle_list : list[Paddle], w : int = 15, h : int = 15
     ):
-        self.current_paddle : int = -len(paddle_list)
-        self.map_canvas : tk.Canvas = canvas   
+        self.number_of_falls : int = 0
+        self.map_canvas : tk.Canvas = canvas
         self.vx : int = 10
-        self.vy : int = 0
+        self.vy : int = 10
         self.x = x
         self.y = y
         self.w = w
@@ -212,20 +212,46 @@ class Barrel:
     def update(self, paddle_list : list[Paddle]) -> int:
 
         self.x += self.vx
-        self.y += self.vy
+        self.x2 += self.vx
+        tk.Canvas.move(self.map_canvas, self.id_, self.vx, 0)
 
-        tk.Canvas.move(self.map_canvas, self.id_, self.vx, self.vy)
+        flipped_direction : bool = False
+
+        if self.falling:
+            self.y += self.vy
+            self.y2 += self.vy
+            tk.Canvas.move(self.map_canvas, self.id_, 0, self.vy)
+
+
+        current_paddle : int = self.get_current_paddle(paddle_list)
 
         if self.x >= constants.WIDTH or self.x <= 0:
-            self.vy *= -1
-            if self.current_paddle == 0:
+            self.vx *= -1
+            self.x += self.vx
+            self.x2 += self.vx
+            tk.Canvas.move(self.map_canvas, self.id_, self.vx, 0)
+            flipped_direction = True
+            self.number_of_falls += 1
+            if (current_paddle == 0) and (self.number_of_falls == len(paddle_list)):
                 return 1
-
-        if self.x >= paddle_list[self.current_paddle].x2 or self.x <= paddle_list[self.current_paddle].x:
-            self.falling = True
-
-        if self.falling and self.y >= (paddle_list[self.current_paddle + 1].y):
+        
+        if (current_paddle >= 0) or ((self.falling) and (self.y >= (paddle_list[current_paddle + 1].y))):
             self.falling = False
 
-            
+        if (not self.falling) and (current_paddle == -1) and not (flipped_direction):
+            self.falling = True
+        
+        
+        if (not self.falling) and ((self.x >= paddle_list[current_paddle].x2) or (self.x2 <= paddle_list[current_paddle].x)):
+            self.falling = True
+
+
+        
         return 0
+
+
+    def get_current_paddle(self, paddle_list : list[Paddle]) -> int:
+        for i, paddle in enumerate(paddle_list):
+            if paddle.y == self.y2:
+                return i
+        return -1

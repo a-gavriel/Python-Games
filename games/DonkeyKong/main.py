@@ -1,7 +1,7 @@
 import tkinter as tk
 from constants import *
 from objects import Mario, Paddle, Stair, Barrel
-
+from random import random as random_f
 
 
 
@@ -27,18 +27,24 @@ def create_stairs(canvas : tk.Canvas) -> list[Stair]:
   return stair_list
 
 
-def update_all(main_window : tk.Tk, player : Mario,  paddle_list : list[Paddle], \
-              barrel_list : list[Barrel], counter : int = 0):
+def update_all(main_window : tk.Tk, main_canvas : tk.Canvas, player : Mario,  \
+              paddle_list : list[Paddle], barrel_list : list[Barrel], counter : int = 0):
 
   if counter % 5 == 0:
-    for barrel in barrel_list:
-      barrel.update(paddle_list)
+    for i, barrel in enumerate(barrel_list):
+      if barrel.update(paddle_list):
+        barrel_list.pop(i)
+
+  if counter % 150 == 0:
+    if random_f() > 0.5:
+      barrel_list.append(Barrel(main_canvas, 20, 85, paddle_list))
+  
 
   if counter % 3 == 0:
     player.update()
 
   
-  main_window.after(5, update_all, main_window, player, paddle_list, barrel_list, counter + 1)
+  main_window.after(5, update_all, main_window, main_canvas, player, paddle_list, barrel_list, counter + 1)
 
 
 def main():
@@ -56,9 +62,9 @@ def main():
 
   player = Mario(canvas, paddle_list, stair_list, 50, MARIO_Y1, 70, PADDLE_1_Y1)
   
-  barrel_list.append(Barrel(canvas, 20, 90, paddle_list))
+  barrel_list.append(Barrel(canvas, 20, 85, paddle_list))
 
-  update_all(main_window, player, paddle_list, barrel_list)
+  update_all(main_window, canvas, player, paddle_list, barrel_list)
 
   main_window.bind("<KeyPress-Left>", player.manage_keys)
   main_window.bind("<KeyRelease-Left>", player.manage_keys)
