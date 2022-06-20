@@ -27,13 +27,34 @@ def create_stairs(canvas : tk.Canvas) -> list[Stair]:
   return stair_list
 
 
+def check_colisions(player : Mario, barrel_list : list[Barrel]) -> int:
+
+  for i, barrel in enumerate(barrel_list):
+    if ((barrel.x2 > player.x) and (barrel.x < player.x2) and (barrel.y < player.y2) and (barrel.y2 > player.y)):
+      return i
+
+  return -1
+
 def update_all(main_window : tk.Tk, main_canvas : tk.Canvas, player : Mario,  \
               paddle_list : list[Paddle], barrel_list : list[Barrel], counter : int = 0):
+
+
+  keep_playing = True
 
   if counter % 5 == 0:
     for i, barrel in enumerate(barrel_list):
       if barrel.update(paddle_list):
-        barrel_list.pop(i)
+        main_canvas.delete(barrel.id_) #remove from canvas
+        barrel_list.pop(i)  #remove from list
+        break
+
+      elif check_colisions(player, barrel_list) >= 0:
+        print(f"Colision with Mario!, current lives: {player.lives-1}")
+        main_canvas.delete(barrel.id_) #remove from canvas
+        barrel_list.pop(i)  #remove from list
+        player.lives -= 1
+        keep_playing = (player.lives > 0)
+        break
 
   if counter % 150 == 0:
     if random_f() > 0.5:
@@ -43,11 +64,16 @@ def update_all(main_window : tk.Tk, main_canvas : tk.Canvas, player : Mario,  \
   if counter % 3 == 0:
     player.update()
 
-  
-  main_window.after(5, update_all, main_window, main_canvas, player, paddle_list, barrel_list, counter + 1)
+  if keep_playing:
+    main_window.after(5, update_all, main_window, main_canvas, player, paddle_list, barrel_list, counter + 1)
+  else:
+    main_window.destroy() 
 
 
-def main():
+
+
+
+def game_handler():
   main_window = tk.Tk()
   main_window.geometry(str(WIDTH)+"x"+str(HEIGHT)+"+100+100")
   main_window.resizable(width = False, height = False)
@@ -80,6 +106,14 @@ def main():
   main_window.bind("<space>", player.jump)
 
   main_window.mainloop()
+
+
+
+def main():
+  game_handler()
+
+  return
+
 
 if __name__ == "__main__":
   main()

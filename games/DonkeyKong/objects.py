@@ -16,12 +16,13 @@ class Mario:
         self.map_canvas: tk.Canvas = map_canvas
         self.stair_list = stair_list
         self.paddle_list = paddle_list
+        self.lives = 3
         self.x = x1
         self.y = y1
         self.x2 = x2
         self.y2 = y2
         self.current_paddle: int = 0
-        self.speed: int = 10
+        self.speed: int = 5
         self.jumping = 0
         self.jump_counter = 0
         self.JUMP_LIMIT = 5
@@ -127,7 +128,7 @@ class Mario:
 
     def in_stair(self) -> bool:
         for stair_ in self.stair_list:
-            if (stair_.x < self.x) and (stair_.x2 > self.x2) and ((stair_.y -10) < self.y2) and ((stair_.y2 - 10) >= self.y2):
+            if (stair_.x < self.x) and (stair_.x2 > self.x2) and ((stair_.y - self.speed) < self.y2) and ((stair_.y2 - self.speed) >= self.y2):
                 return True
         return False
 
@@ -136,7 +137,7 @@ class Mario:
             return
             
         for stair_ in self.stair_list:
-            if (stair_.x < self.x) and (stair_.x2 > self.x2) and ((stair_.y - 10) < self.y2) and (stair_.y2 >= self.y2):
+            if (stair_.x < self.x) and (stair_.x2 > self.x2) and ((stair_.y - self.speed) <= self.y2) and (stair_.y2 >= self.y2):
                 self.map_canvas.move(self.id_, 0, -self.speed)
                 self.y -= self.speed
                 self.y2 -= self.speed
@@ -149,7 +150,7 @@ class Mario:
             return
 
         for stair_ in self.stair_list:
-            if (stair_.x < self.x) and (stair_.x2 > self.x2) and ((stair_.y - 20) < self.y2) and ((stair_.y2 - 10) >= self.y2):
+            if (stair_.x < self.x) and (stair_.x2 > self.x2) and ((stair_.y - (2*self.speed)) <= self.y2) and ((stair_.y2 - self.speed) >= self.y2):
                 self.map_canvas.move(self.id_, 0, self.speed)
                 self.y += self.speed
                 self.y2 += self.speed
