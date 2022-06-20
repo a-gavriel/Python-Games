@@ -62,7 +62,6 @@ def main():
 
   player = Mario(canvas, paddle_list, stair_list, 50, MARIO_Y1, 70, PADDLE_1_Y1)
   
-  barrel_list.append(Barrel(canvas, 20, 85, paddle_list))
 
   update_all(main_window, canvas, player, paddle_list, barrel_list)
 
